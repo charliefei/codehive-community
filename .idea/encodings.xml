@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/codehive-subject/codehive-application/codehive-application-controller/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-subject/codehive-application/codehive-application-controller/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-subject/codehive-application/codehive-application-job/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-subject/codehive-application/codehive-application-job/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-subject/codehive-application/codehive-application-mq/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-subject/codehive-application/codehive-application-mq/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-subject/codehive-application/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-subject/codehive-application/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-subject/codehive-common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-subject/codehive-common/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-subject/codehive-domain/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-subject/codehive-domain/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-subject/codehive-infra/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-subject/codehive-infra/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-subject/codehive-starter/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-subject/codehive-starter/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-subject/codehive-subject-api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-subject/codehive-subject-api/src/main/resources" charset="UTF-8" />
+  </component>
+</project>
