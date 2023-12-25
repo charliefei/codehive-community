@@ -14,4 +14,14 @@ public interface SubjectCategoryDomainService {
      * 查询分类
      */
     List<SubjectCategoryBO> queryCategory(SubjectCategoryBO bo);
+
+    /**
+     * 更新分类
+     */
+    Boolean update(SubjectCategoryBO bo);
+
+    /**
+     * 删除分类
+     */
+    Boolean delete(SubjectCategoryBO bo);
 }

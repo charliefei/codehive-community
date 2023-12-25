@@ -34,7 +34,7 @@ public interface SubjectCategoryService {
      * @param subjectCategory 实例对象
      * @return 实例对象
      */
-    SubjectCategory update(SubjectCategory subjectCategory);
+    Integer update(SubjectCategory subjectCategory);
 
     /**
      * 通过主键删除数据

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.feirui.subject.application.convert.SubjectCategoryDTOConverter;
 import com.feirui.subject.application.dto.SubjectCategoryDTO;
 import com.feirui.subject.common.entity.Result;
+import com.feirui.subject.common.enums.CategoryTypeEnum;
 import com.feirui.subject.domain.bo.SubjectCategoryBO;
 import com.feirui.subject.domain.service.SubjectCategoryDomainService;
 import com.google.common.base.Preconditions;
@@ -32,6 +33,7 @@ public class SubjectCategoryController {
             }
             // guava断言工具类
             Preconditions.checkNotNull(dto.getCategoryType(), "分类类型不能为空");
+            Preconditions.checkArgument(CategoryTypeEnum.types().contains(dto.getCategoryType()), "无效的分类类型");
             Preconditions.checkArgument(!StringUtils.isBlank(dto.getCategoryName()), "分类名称不能为空");
             Preconditions.checkNotNull(dto.getParentId(), "分类父级id不能为空");
             // mapStructs对象属性拷贝
@@ -60,7 +62,7 @@ public class SubjectCategoryController {
     }
 
     @PostMapping("/queryCategoryByPrimary")
-    public Result<List<SubjectCategoryDTO>> queryCategoryByPrimary(@RequestBody SubjectCategoryDTO dto) {
+    public Result queryCategoryByPrimary(@RequestBody SubjectCategoryDTO dto) {
         try {
             if (log.isInfoEnabled()) {
                 log.info("queryCategoryByPrimary.dto {}", JSON.toJSONString(dto));
@@ -74,6 +76,38 @@ public class SubjectCategoryController {
             return Result.ok(dtoList);
         } catch (Exception e) {
             log.error("queryCategoryByPrimary.err {}", e.getMessage(), e);
+            return Result.fail(e.getMessage());
+        }
+    }
+
+    @PostMapping("/update")
+    public Result<Boolean> update(@RequestBody SubjectCategoryDTO dto) {
+        try {
+            if (log.isInfoEnabled()) {
+                log.info("update.dto {}", JSON.toJSONString(dto));
+            }
+            SubjectCategoryBO bo = SubjectCategoryDTOConverter.INSTANCE
+                    .convert(dto);
+            Boolean res = subjectCategoryDomainService.update(bo);
+            return Result.ok(res);
+        } catch (Exception e) {
+            log.error("update.err {}", e.getMessage(), e);
+            return Result.fail(e.getMessage());
+        }
+    }
+
+    @PostMapping("/delete")
+    public Result<Boolean> delete(@RequestBody SubjectCategoryDTO dto) {
+        try {
+            if (log.isInfoEnabled()) {
+                log.info("update.dto {}", JSON.toJSONString(dto));
+            }
+            SubjectCategoryBO bo = SubjectCategoryDTOConverter.INSTANCE
+                    .convert(dto);
+            Boolean res = subjectCategoryDomainService.delete(bo);
+            return Result.ok(res);
+        } catch (Exception e) {
+            log.error("update.err {}", e.getMessage(), e);
             return Result.fail(e.getMessage());
         }
     }
