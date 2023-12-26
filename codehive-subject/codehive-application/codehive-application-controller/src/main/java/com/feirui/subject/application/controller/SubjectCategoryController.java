@@ -36,6 +36,7 @@ public class SubjectCategoryController {
             Preconditions.checkArgument(CategoryTypeEnum.types().contains(dto.getCategoryType()), "无效的分类类型");
             Preconditions.checkArgument(!StringUtils.isBlank(dto.getCategoryName()), "分类名称不能为空");
             Preconditions.checkNotNull(dto.getParentId(), "分类父级id不能为空");
+            // todo 防御性编程：parentId只能是0(代表是一级分类)或者分类表中的已经存在的分类id(二级分类)
             // mapStructs对象属性拷贝
             SubjectCategoryBO categoryBO = SubjectCategoryDTOConverter.INSTANCE
                     .convert(dto);
@@ -48,9 +49,12 @@ public class SubjectCategoryController {
     }
 
     @PostMapping("/queryPrimaryCategory")
-    public Result<List<SubjectCategoryDTO>> queryPrimaryCategory() {
+    public Result<List<SubjectCategoryDTO>> queryPrimaryCategory(@RequestBody SubjectCategoryDTO dto) {
         try {
-            SubjectCategoryBO bo = new SubjectCategoryBO();
+            Preconditions.checkNotNull(dto.getCategoryType(), "分类类型不能为空");
+            Preconditions.checkArgument(CategoryTypeEnum.types().contains(dto.getCategoryType()), "无效的分类类型");
+            SubjectCategoryBO bo = SubjectCategoryDTOConverter.INSTANCE
+                    .convert(dto);
             List<SubjectCategoryBO> bos = subjectCategoryDomainService.queryCategory(bo);
             List<SubjectCategoryDTO> dtoList = SubjectCategoryDTOConverter.INSTANCE
                     .convert(bos);
@@ -67,7 +71,7 @@ public class SubjectCategoryController {
             if (log.isInfoEnabled()) {
                 log.info("queryCategoryByPrimary.dto {}", JSON.toJSONString(dto));
             }
-            Preconditions.checkNotNull(dto.getParentId(), "分类id不可为空！");
+            Preconditions.checkNotNull(dto.getParentId(), "父类id不可为空！");
             SubjectCategoryBO bo = SubjectCategoryDTOConverter.INSTANCE
                     .convert(dto);
             List<SubjectCategoryBO> bos = subjectCategoryDomainService.queryCategory(bo);
