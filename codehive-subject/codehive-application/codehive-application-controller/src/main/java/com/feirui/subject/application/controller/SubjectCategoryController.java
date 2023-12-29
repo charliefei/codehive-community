@@ -66,7 +66,7 @@ public class SubjectCategoryController {
     }
 
     @PostMapping("/queryCategoryByPrimary")
-    public Result queryCategoryByPrimary(@RequestBody SubjectCategoryDTO dto) {
+    public Result<List<SubjectCategoryDTO>> queryCategoryByPrimary(@RequestBody SubjectCategoryDTO dto) {
         try {
             if (log.isInfoEnabled()) {
                 log.info("queryCategoryByPrimary.dto {}", JSON.toJSONString(dto));
@@ -74,9 +74,9 @@ public class SubjectCategoryController {
             Preconditions.checkNotNull(dto.getParentId(), "父类id不可为空！");
             SubjectCategoryBO bo = SubjectCategoryDTOConverter.INSTANCE
                     .convert(dto);
-            List<SubjectCategoryBO> bos = subjectCategoryDomainService.queryCategory(bo);
+            List<SubjectCategoryBO> boList = subjectCategoryDomainService.queryCategory(bo);
             List<SubjectCategoryDTO> dtoList = SubjectCategoryDTOConverter.INSTANCE
-                    .convert(bos);
+                    .convert(boList);
             return Result.ok(dtoList);
         } catch (Exception e) {
             log.error("queryCategoryByPrimary.err {}", e.getMessage(), e);
