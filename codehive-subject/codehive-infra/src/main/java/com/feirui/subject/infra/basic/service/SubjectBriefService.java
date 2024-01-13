@@ -8,5 +8,6 @@ import com.feirui.subject.infra.basic.entity.SubjectBrief;
  */
 public interface SubjectBriefService extends IService<SubjectBrief> {
 
+    SubjectBrief queryBySubjectId(Long subjectId);
 }
 

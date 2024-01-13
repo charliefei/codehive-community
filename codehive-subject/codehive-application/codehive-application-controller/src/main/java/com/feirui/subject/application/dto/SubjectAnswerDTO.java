@@ -5,7 +5,8 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * 题目答案dto
+ * 题目答案dto：
+ *  对不同类型题目统一抽象出来的对象
  */
 @Data
 public class SubjectAnswerDTO implements Serializable {

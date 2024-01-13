@@ -43,6 +43,7 @@ public class SubjectInfoBO extends PageInfo implements Serializable {
      */
     private String subjectParse;
 
+    /* 以下属性都是扩展的业务属性 */
     /**
      * 题目答案
      */

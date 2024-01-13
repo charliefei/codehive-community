@@ -49,7 +49,13 @@ public interface SubjectMappingService extends IService<SubjectMapping> {
      * 根据分类id查询分类与标签映射关系
      *
      * @param categoryId 分类id
-     * @return 分类与标签映射关系列表
      */
     List<SubjectMapping> queryMappingsByCategoryId(Long categoryId);
+
+    /**
+     * 根据题目id查询分类与标签映射关系
+     *
+     * @param subjectId 题目id
+     */
+    List<SubjectMapping> queryMappingsBySubjectId(Long subjectId);
 }

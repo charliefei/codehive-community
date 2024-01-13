@@ -1,20 +1,26 @@
 package com.feirui.subject.domain.service.impl;
 
+import com.feirui.subject.common.entity.PageResult;
 import com.feirui.subject.common.enums.IsDeletedFlagEnum;
 import com.feirui.subject.domain.bo.SubjectInfoBO;
+import com.feirui.subject.domain.bo.SubjectOptionBO;
 import com.feirui.subject.domain.convert.SubjectInfoConverter;
 import com.feirui.subject.domain.service.strategy.SubjectTypeHandlerFactory;
 import com.feirui.subject.domain.service.strategy.handler.SubjectTypeHandler;
 import com.feirui.subject.infra.basic.entity.SubjectInfo;
+import com.feirui.subject.infra.basic.entity.SubjectLabel;
 import com.feirui.subject.infra.basic.entity.SubjectMapping;
 import com.feirui.subject.infra.basic.service.SubjectInfoService;
+import com.feirui.subject.infra.basic.service.SubjectLabelService;
 import com.feirui.subject.infra.basic.service.SubjectMappingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -25,7 +31,10 @@ public class SubjectInfoDomainService {
     private SubjectTypeHandlerFactory subjectTypeHandlerFactory;
     @Resource
     private SubjectMappingService subjectMappingService;
+    @Resource
+    private SubjectLabelService subjectLabelService;
 
+    @Transactional(rollbackFor = Exception.class)
     public void add(SubjectInfoBO bo) {
         SubjectInfo subjectInfo = SubjectInfoConverter.INSTANCE.convert(bo);
         subjectInfo.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getStatus());
@@ -41,6 +50,7 @@ public class SubjectInfoDomainService {
         List<Integer> categoryIds = bo.getCategoryIds();
         List<Integer> labelIds = bo.getLabelIds();
         List<SubjectMapping> subjectMappingList = new LinkedList<>();
+        // (1*n*n)条数据: 1一个题目 -> n个分类 -> n个标签
         categoryIds.forEach(categoryId -> {
             labelIds.forEach(labelId -> {
                 SubjectMapping subjectMapping = new SubjectMapping();
@@ -52,5 +62,60 @@ public class SubjectInfoDomainService {
             });
         });
         subjectMappingService.saveBatch(subjectMappingList);
+    }
+
+    public PageResult<SubjectInfoBO> getSubjectPage(SubjectInfoBO bo) {
+        PageResult<SubjectInfoBO> pageResult = new PageResult<>();
+        pageResult.setPageSize(bo.getPageSize());
+        pageResult.setPageNo(bo.getPageNo());
+        // 查询该难度下题目在数据库中总条数
+        SubjectInfo subjectInfo = SubjectInfoConverter.INSTANCE.convert(bo);
+        int total = subjectInfoService.countByCondition(subjectInfo,
+                bo.getCategoryId(), bo.getLabelId());
+        if (total == 0) {
+            return pageResult;
+        }
+
+        // 计算该页在数据库中的第几条开始分页
+        int start = (bo.getPageNo() - 1) * bo.getPageSize();
+        // 按条件查询题目
+        List<SubjectInfo> subjectInfoList = subjectInfoService.queryPage(
+                subjectInfo,
+                bo.getCategoryId(),
+                bo.getLabelId(),
+                start,
+                bo.getPageSize()
+        );
+        List<SubjectInfoBO> boList = SubjectInfoConverter.INSTANCE.convert(subjectInfoList);
+        boList.forEach(info -> {
+            List<String> labelNames = getLabelNameList(info.getId());
+            info.setLabelName(labelNames);
+        });
+        pageResult.setRecords(boList);
+        return pageResult;
+    }
+
+    public SubjectInfoBO querySubjectInfo(SubjectInfoBO subjectInfoBO) {
+        SubjectInfo subjectInfo = subjectInfoService.getById(subjectInfoBO.getId());
+
+        SubjectTypeHandler handler = subjectTypeHandlerFactory.getHandler(subjectInfo.getSubjectType());
+        SubjectOptionBO optionBO = handler.query(subjectInfo.getId());
+        SubjectInfoBO infoBO = SubjectInfoConverter.INSTANCE.convert(optionBO);
+
+        List<String> labelNameList = getLabelNameList(subjectInfo.getId());
+        infoBO.setLabelName(labelNameList);
+        return infoBO;
+    }
+
+    private List<String> getLabelNameList(Long subjectId) {
+        List<SubjectMapping> mappingList = subjectMappingService
+                .queryMappingsBySubjectId(subjectId);
+        List<Long> labelIdList = mappingList.stream()
+                .map(SubjectMapping::getLabelId)
+                .collect(Collectors.toList());
+        List<SubjectLabel> labelList = subjectLabelService.queryLabelsByIds(labelIdList);
+        return labelList.stream()
+                .map(SubjectLabel::getLabelName)
+                .collect(Collectors.toList());
     }
 }

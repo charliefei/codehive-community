@@ -12,9 +12,6 @@ import java.util.List;
 
 /**
  * 题目分类关系表(SubjectMapping)表服务实现类
- *
- * @author makejava
- * @since 2023-12-28 15:08:47
  */
 @Service("subjectMappingService")
 public class SubjectMappingServiceImpl extends ServiceImpl<SubjectMappingDao, SubjectMapping> implements SubjectMappingService {
@@ -70,12 +67,23 @@ public class SubjectMappingServiceImpl extends ServiceImpl<SubjectMappingDao, Su
     /**
      * 根据分类id查询分类与标签映射关系
      * @param categoryId 分类id
-     * @return 分类与标签映射关系列表
      */
     @Override
     public List<SubjectMapping> queryMappingsByCategoryId(Long categoryId) {
         return this.lambdaQuery()
                 .eq(SubjectMapping::getCategoryId, categoryId)
+                .eq(SubjectMapping::getIsDeleted, IsDeletedFlagEnum.UN_DELETED.getStatus())
+                .list();
+    }
+
+    /**
+     * 根据题目id查询分类与标签映射关系
+     * @param subjectId 题目id
+     */
+    @Override
+    public List<SubjectMapping> queryMappingsBySubjectId(Long subjectId) {
+        return this.lambdaQuery()
+                .eq(SubjectMapping::getSubjectId, subjectId)
                 .eq(SubjectMapping::getIsDeleted, IsDeletedFlagEnum.UN_DELETED.getStatus())
                 .list();
     }

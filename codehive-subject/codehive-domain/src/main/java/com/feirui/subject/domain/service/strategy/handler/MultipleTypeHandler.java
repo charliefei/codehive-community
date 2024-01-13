@@ -2,7 +2,9 @@ package com.feirui.subject.domain.service.strategy.handler;
 
 import com.feirui.subject.common.enums.IsDeletedFlagEnum;
 import com.feirui.subject.common.enums.SubjectTypeEnum;
+import com.feirui.subject.domain.bo.SubjectAnswerBO;
 import com.feirui.subject.domain.bo.SubjectInfoBO;
+import com.feirui.subject.domain.bo.SubjectOptionBO;
 import com.feirui.subject.domain.convert.MultipleSubjectConverter;
 import com.feirui.subject.infra.basic.entity.SubjectMultiple;
 import com.feirui.subject.infra.basic.service.SubjectMultipleService;
@@ -36,5 +38,17 @@ public class MultipleTypeHandler implements SubjectTypeHandler {
             subjectMultipleList.add(subjectMultiple);
         });
         subjectMultipleService.saveBatch(subjectMultipleList);
+    }
+
+    @Override
+    public SubjectOptionBO query(Long subjectId) {
+        // 根据题目id查出多选题答案数据
+        List<SubjectMultiple> subjectMultiples = subjectMultipleService.getBySubjectId(subjectId);
+        // 属性值复制到SubjectAnswer，再设置到SubjectOption上
+        List<SubjectAnswerBO> subjectAnswerBOList = MultipleSubjectConverter.INSTANCE
+                .convert(subjectMultiples);
+        SubjectOptionBO subjectOptionBO = new SubjectOptionBO();
+        subjectOptionBO.setOptionList(subjectAnswerBOList);
+        return subjectOptionBO;
     }
 }

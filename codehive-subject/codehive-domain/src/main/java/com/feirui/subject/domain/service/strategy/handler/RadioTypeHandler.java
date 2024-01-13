@@ -2,7 +2,9 @@ package com.feirui.subject.domain.service.strategy.handler;
 
 import com.feirui.subject.common.enums.IsDeletedFlagEnum;
 import com.feirui.subject.common.enums.SubjectTypeEnum;
+import com.feirui.subject.domain.bo.SubjectAnswerBO;
 import com.feirui.subject.domain.bo.SubjectInfoBO;
+import com.feirui.subject.domain.bo.SubjectOptionBO;
 import com.feirui.subject.domain.convert.RadioSubjectConverter;
 import com.feirui.subject.infra.basic.entity.SubjectRadio;
 import com.feirui.subject.infra.basic.service.SubjectRadioService;
@@ -40,5 +42,16 @@ public class RadioTypeHandler implements SubjectTypeHandler {
                 })
                 .collect(Collectors.toList());
         subjectRadioService.saveBatch(subjectRadioList);
+    }
+
+    @Override
+    public SubjectOptionBO query(Long subjectId) {
+        // 查出单选题数据
+        List<SubjectRadio> subjectRadios = subjectRadioService.getBySubjectId(subjectId);
+        // 属性值复制到SubjectAnswer，再设置到SubjectOption上
+        List<SubjectAnswerBO> subjectAnswerBOList = RadioSubjectConverter.INSTANCE.convert(subjectRadios);
+        SubjectOptionBO subjectOptionBO = new SubjectOptionBO();
+        subjectOptionBO.setOptionList(subjectAnswerBOList);
+        return subjectOptionBO;
     }
 }
