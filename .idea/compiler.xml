@@ -9,6 +9,7 @@
       <directory url="file://$PROJECT_DIR$/codehive-subject/codehive-starter/src/main/resources/archetype-resources" includeSubdirectories="true" />
       <directory url="file://$PROJECT_DIR$/codehive-subject/codehive-application/codehive-application-controller/src/main/resources/archetype-resources" includeSubdirectories="true" />
       <directory url="file://$PROJECT_DIR$/codehive-subject/codehive-application/codehive-application-job/src/main/resources/archetype-resources" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/codehive-oss/src/main/resources/archetype-resources" includeSubdirectories="true" />
     </excludeFromCompile>
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
@@ -23,6 +24,7 @@
         <module name="codehive-application-controller" />
         <module name="codehive-application" />
         <module name="codehive-application-mq" />
+        <module name="codehive-oss" />
         <module name="codehive-domain" />
         <module name="codehive-starter" />
       </profile>
