@@ -43,9 +43,16 @@ public interface SubjectLabelService extends IService<SubjectLabel> {
     boolean deleteById(Long id);
 
     /**
-     * 根据标签id集合查询数据
+     * 根据标签id集合查询标签
      * @param labelIdList 标签id集合
      * @return 标签集合
      */
     List<SubjectLabel> queryLabelsByIds(List<Long> labelIdList);
+
+    /**
+     * 根据分类id查询标签
+     * @param categoryId 分类id
+     * @return 标签集合
+     */
+    List<SubjectLabel> queryLabelsByCategoryId(Long categoryId);
 }

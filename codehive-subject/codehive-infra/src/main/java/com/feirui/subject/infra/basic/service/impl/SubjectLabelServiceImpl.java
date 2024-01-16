@@ -71,4 +71,12 @@ public class SubjectLabelServiceImpl extends ServiceImpl<SubjectLabelDao, Subjec
                 .eq(SubjectLabel::getIsDeleted, IsDeletedFlagEnum.UN_DELETED.getStatus())
                 .list();
     }
+
+    @Override
+    public List<SubjectLabel> queryLabelsByCategoryId(Long categoryId) {
+        return lambdaQuery()
+                .eq(SubjectLabel::getCategoryId, categoryId)
+                .eq(SubjectLabel::getIsDeleted, IsDeletedFlagEnum.UN_DELETED.getStatus())
+                .list();
+    }
 }

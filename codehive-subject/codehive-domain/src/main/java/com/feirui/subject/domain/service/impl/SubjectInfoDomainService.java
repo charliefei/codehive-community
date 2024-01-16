@@ -16,8 +16,10 @@ import com.feirui.subject.infra.basic.service.SubjectMappingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -110,8 +112,12 @@ public class SubjectInfoDomainService {
     private List<String> getLabelNameList(Long subjectId) {
         List<SubjectMapping> mappingList = subjectMappingService
                 .queryMappingsBySubjectId(subjectId);
+        if (CollectionUtils.isEmpty(mappingList)) {
+            return Collections.emptyList();
+        }
         List<Long> labelIdList = mappingList.stream()
                 .map(SubjectMapping::getLabelId)
+                .distinct()
                 .collect(Collectors.toList());
         List<SubjectLabel> labelList = subjectLabelService.queryLabelsByIds(labelIdList);
         return labelList.stream()

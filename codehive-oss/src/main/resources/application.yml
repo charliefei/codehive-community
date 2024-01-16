@@ -4,3 +4,5 @@ minio:
   url: http://192.168.243.132:9000
   accessKey: minioadmin
   secretKey: minioadmin
+oss:
+  type: minio
