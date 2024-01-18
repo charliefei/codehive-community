@@ -6,6 +6,8 @@
       <list>
         <option value="$PROJECT_DIR$/codehive-subject/pom.xml" />
         <option value="$PROJECT_DIR$/codehive-oss/pom.xml" />
+        <option value="$PROJECT_DIR$/codehive-auth/pom.xml" />
+        <option value="$PROJECT_DIR$/codehive-gateway/pom.xml" />
       </list>
     </option>
   </component>

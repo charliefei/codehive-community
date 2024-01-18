@@ -10,6 +10,16 @@
       <directory url="file://$PROJECT_DIR$/codehive-subject/codehive-application/codehive-application-controller/src/main/resources/archetype-resources" includeSubdirectories="true" />
       <directory url="file://$PROJECT_DIR$/codehive-subject/codehive-application/codehive-application-job/src/main/resources/archetype-resources" includeSubdirectories="true" />
       <directory url="file://$PROJECT_DIR$/codehive-oss/src/main/resources/archetype-resources" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/codehive-auth/src/main/resources/archetype-resources" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/codehive-gateway/src/main/resources/archetype-resources" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/codehive-auth/codehive-auth-application/codehive-auth-application-controller/src/main/resources/archetype-resources" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/codehive-auth/codehive-auth-application/codehive-auth-application-job/src/main/resources/archetype-resources" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/codehive-auth/codehive-auth-application/codehive-auth-application-mq/src/main/resources/archetype-resources" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/codehive-auth/codehive-auth-common/src/main/resources/archetype-resources" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/codehive-auth/codehive-auth-domain/src/main/resources/archetype-resources" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/codehive-auth/codehive-auth-infra/src/main/resources/archetype-resources" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/codehive-auth/codehive-auth-starter/src/main/resources/archetype-resources" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/codehive-auth/codehive-auth-api/src/main/resources/archetype-resources" includeSubdirectories="true" />
     </excludeFromCompile>
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
@@ -19,14 +29,23 @@
         <outputRelativeToContentRoot value="true" />
         <module name="codehive-infra" />
         <module name="codehive-application-job" />
-        <module name="codehive-common" />
-        <module name="codehive-subject-api" />
+        <module name="codehive-auth-starter" />
         <module name="codehive-application-controller" />
         <module name="codehive-application" />
-        <module name="codehive-application-mq" />
+        <module name="codehive-auth-domain" />
         <module name="codehive-oss" />
         <module name="codehive-domain" />
+        <module name="codehive-auth-common" />
         <module name="codehive-starter" />
+        <module name="codehive-auth-api" />
+        <module name="codehive-common" />
+        <module name="codehive-subject-api" />
+        <module name="codehive-auth-application-mq" />
+        <module name="codehive-application-mq" />
+        <module name="codehive-gateway" />
+        <module name="codehive-auth-application-job" />
+        <module name="codehive-auth-application-controller" />
+        <module name="codehive-auth-infra" />
       </profile>
     </annotationProcessing>
   </component>

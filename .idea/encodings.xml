@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/codehive-auth/codehive-auth-api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-auth/codehive-auth-api/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-auth/codehive-auth-application/codehive-auth-application-controller/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-auth/codehive-auth-application/codehive-auth-application-controller/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-auth/codehive-auth-application/codehive-auth-application-job/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-auth/codehive-auth-application/codehive-auth-application-job/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-auth/codehive-auth-application/codehive-auth-application-mq/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-auth/codehive-auth-application/codehive-auth-application-mq/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-auth/codehive-auth-application/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-auth/codehive-auth-application/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-auth/codehive-auth-common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-auth/codehive-auth-common/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-auth/codehive-auth-domain/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-auth/codehive-auth-domain/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-auth/codehive-auth-infra/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-auth/codehive-auth-infra/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-auth/codehive-auth-starter/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-auth/codehive-auth-starter/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-auth/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-auth/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-gateway/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/codehive-gateway/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/codehive-oss/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/codehive-oss/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/codehive-subject/codehive-application/codehive-application-controller/src/main/java" charset="UTF-8" />
