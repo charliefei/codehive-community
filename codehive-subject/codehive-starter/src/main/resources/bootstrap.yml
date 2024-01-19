@@ -1,6 +1,6 @@
 spring:
   application:
-    name: codehive-oss
+    name: codehive-subject
   profiles:
     active: dev
   cloud:

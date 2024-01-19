@@ -1,10 +1,6 @@
 server:
   port: 3011
 spring:
-  application:
-    name: codehive
-  profiles:
-    active: dev
   datasource:
     username: ${codehive.datasource.username}
     password: ${codehive.datasource.password}
@@ -30,5 +26,3 @@ spring:
           enabled: true
         config:
           enabled: true
-logging:
-  config: classpath:log4j2-spring.xml
