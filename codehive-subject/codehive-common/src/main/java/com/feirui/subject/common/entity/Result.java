@@ -33,7 +33,7 @@ public class Result<T> {
 
     public static Result fail() {
         Result<?> result = new Result<>();
-        result.setSuccess(true);
+        result.setSuccess(false);
         result.setCode(ResultCodeEnum.FAIL.getCode());
         result.setMessage(ResultCodeEnum.FAIL.getDesc());
         return result;
@@ -41,7 +41,7 @@ public class Result<T> {
 
     public static Result fail(String message) {
         Result<?> result = new Result<>();
-        result.setSuccess(true);
+        result.setSuccess(false);
         result.setCode(ResultCodeEnum.FAIL.getCode());
         result.setMessage(message);
         return result;
