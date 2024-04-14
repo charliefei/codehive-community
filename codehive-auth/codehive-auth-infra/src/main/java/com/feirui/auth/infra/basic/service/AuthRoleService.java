@@ -8,5 +8,6 @@ import com.feirui.auth.infra.basic.entity.AuthRole;
  */
 public interface AuthRoleService extends IService<AuthRole> {
 
+    AuthRole queryByRoleKey(String roleKey);
 }
 

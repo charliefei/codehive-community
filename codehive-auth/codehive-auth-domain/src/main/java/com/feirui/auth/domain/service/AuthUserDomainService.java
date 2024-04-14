@@ -3,35 +3,74 @@ package com.feirui.auth.domain.service;
 import com.feirui.auth.common.enums.AuthUserStatusEnum;
 import com.feirui.auth.common.enums.IsDeletedFlagEnum;
 import com.feirui.auth.domain.bo.AuthUserBO;
+import com.feirui.auth.domain.constants.AuthConstant;
 import com.feirui.auth.domain.convert.AuthUserBOConverter;
-import com.feirui.auth.infra.basic.entity.AuthUser;
-import com.feirui.auth.infra.basic.service.AuthUserService;
+import com.feirui.auth.domain.redis.RedisUtil;
+import com.feirui.auth.infra.basic.entity.*;
+import com.feirui.auth.infra.basic.service.*;
+import com.google.gson.Gson;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthUserDomainService {
+    private static final String authPermissionPrefix = "auth.permission";
+    private static final String authRolePrefix = "auth.role";
     @Resource
     private AuthUserService authUserService;
+    @Resource
+    private AuthUserRoleService authUserRoleService;
+    @Resource
+    private AuthRoleService authRoleService;
+    @Resource
+    private AuthRolePermissionService authRolePermissionService;
+    @Resource
+    private AuthPermissionService authPermissionService;
+    @Resource
+    private RedisUtil redisUtil;
 
+    @Transactional(rollbackFor = Exception.class)
     public Boolean register(AuthUserBO authUserBO) {
         // 校验用户是否存在
         List<AuthUser> existUsers = authUserService.queryByUsername(authUserBO.getUserName());
         if (!CollectionUtils.isEmpty(existUsers)) {
             return Boolean.TRUE;
         }
+
         // 基本信息持久化入库
         AuthUser authUser = AuthUserBOConverter.INSTANCE.convert(authUserBO);
         authUser.setStatus(AuthUserStatusEnum.OPEN.getCode());
         authUser.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
         boolean success = authUserService.save(authUser);
-        // 建立一个用户与角色的关联
 
-        // 根据roleId查权限
+        // 建立一个用户与角色的关联，入库
+        AuthRole authRole = authRoleService.queryByRoleKey(AuthConstant.NORMAL_USER);
+        AuthUserRole authUserRole = new AuthUserRole();
+        authUserRole.setUserId(authUser.getId());
+        authUserRole.setRoleId(authRole.getId());
+        authUserRole.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
+        authUserRoleService.save(authUserRole);
 
+        // 将该用户所拥有的角色，写入缓存
+        String roleCacheKey = redisUtil.buildKey(authRolePrefix, authUser.getUserName());
+        List<AuthRole> roles = new LinkedList<>();
+        roles.add(authRole);
+        redisUtil.set(roleCacheKey, new Gson().toJson(roles));
+
+        // 将该用户所拥有的权限，写入缓存
+        List<Long> permissionIds = authRolePermissionService.queryByRoleId(authRole.getId())
+                .stream()
+                .map(AuthRolePermission::getPermissionId)
+                .collect(Collectors.toList());
+        List<AuthPermission> authPermissions = authPermissionService.queryByIds(permissionIds);
+        String permissionCacheKey = redisUtil.buildKey(authPermissionPrefix, authUser.getUserName());
+        redisUtil.set(permissionCacheKey, new Gson().toJson(authPermissions));
         return success;
     }
 

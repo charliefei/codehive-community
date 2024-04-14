@@ -56,6 +56,9 @@ public class SubjectController {
         }
     }
 
+    /**
+     * 查询题目列表
+     */
     @PostMapping("/getSubjectPage")
     public Result<PageResult<SubjectInfoDTO>> getSubjectPage(@RequestBody SubjectInfoDTO dto) {
         try {

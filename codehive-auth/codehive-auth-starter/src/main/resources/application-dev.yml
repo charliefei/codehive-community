@@ -6,6 +6,6 @@ codehive:
     port: 3306
     db: codehive
   redis:
-    host: 192.168.243.159
+    host: 192.168.243.160
     port: 6379
     password: 123456
