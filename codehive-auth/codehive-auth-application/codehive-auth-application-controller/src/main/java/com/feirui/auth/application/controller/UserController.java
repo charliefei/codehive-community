@@ -1,5 +1,6 @@
 package com.feirui.auth.application.controller;
 
+import cn.dev33.satoken.stp.SaTokenInfo;
 import com.alibaba.fastjson.JSON;
 import com.feirui.auth.application.convert.AuthUserDTOConverter;
 import com.feirui.auth.domain.bo.AuthUserBO;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -112,6 +114,17 @@ public class UserController {
         } catch (Exception e) {
             log.error("UserController.update.error:{}", e.getMessage(), e);
             return Result.fail("更新用户信息失败");
+        }
+    }
+
+    @RequestMapping("doLogin")
+    public Result<SaTokenInfo> doLogin(@RequestParam("validCode") String validCode) {
+        try {
+            Preconditions.checkArgument(!StringUtils.isBlank(validCode), "验证码不能为空!");
+            return Result.ok(authUserDomainService.doLogin(validCode));
+        } catch (Exception e) {
+            log.error("UserController.doLogin.error:{}", e.getMessage(), e);
+            return Result.fail("用户登录失败");
         }
     }
 }

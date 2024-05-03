@@ -1,5 +1,8 @@
 package com.feirui.auth.domain.service;
 
+import cn.dev33.satoken.secure.SaSecureUtil;
+import cn.dev33.satoken.stp.SaTokenInfo;
+import cn.dev33.satoken.stp.StpUtil;
 import com.feirui.auth.common.enums.AuthUserStatusEnum;
 import com.feirui.auth.common.enums.IsDeletedFlagEnum;
 import com.feirui.auth.domain.bo.AuthUserBO;
@@ -9,6 +12,7 @@ import com.feirui.auth.domain.redis.RedisUtil;
 import com.feirui.auth.infra.basic.entity.*;
 import com.feirui.auth.infra.basic.service.*;
 import com.google.gson.Gson;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -22,6 +26,7 @@ import java.util.stream.Collectors;
 public class AuthUserDomainService {
     private static final String authPermissionPrefix = "auth.permission";
     private static final String authRolePrefix = "auth.role";
+    private static final String LOGIN_PREFIX = "loginCode";
     @Resource
     private AuthUserService authUserService;
     @Resource
@@ -45,11 +50,17 @@ public class AuthUserDomainService {
 
         // 基本信息持久化入库
         AuthUser authUser = AuthUserBOConverter.INSTANCE.convert(authUserBO);
+        if (StringUtils.isNotBlank(authUser.getPassword())) {
+            authUser.setPassword(SaSecureUtil.md5BySalt(authUser.getPassword(), "charlie"));
+        }
+        if (StringUtils.isBlank(authUser.getAvatar())) {
+            authUser.setAvatar("http://117.72.10.84:9000/user/icon/微信图片_20231203153718(1).png");
+        }
         authUser.setStatus(AuthUserStatusEnum.OPEN.getCode());
         authUser.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
         boolean success = authUserService.save(authUser);
 
-        // 建立一个用户与角色的关联，入库
+        // 建立一个初步的用户与角色(NORMAL_USER)的关联，入库
         AuthRole authRole = authRoleService.queryByRoleKey(AuthConstant.NORMAL_USER);
         AuthUserRole authUserRole = new AuthUserRole();
         authUserRole.setUserId(authUser.getId());
@@ -103,5 +114,21 @@ public class AuthUserDomainService {
         }
         AuthUser user = userList.get(0);
         return AuthUserBOConverter.INSTANCE.convert(user);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public SaTokenInfo doLogin(String validCode) {
+        String loginKey = redisUtil.buildKey(LOGIN_PREFIX, validCode);
+        // loginId实际就是微信扫码用户的openId
+        String loginId = redisUtil.get(loginKey);
+        if (StringUtils.isBlank(loginId)) {
+            return null;
+        }
+        AuthUserBO authUserBO = new AuthUserBO();
+        authUserBO.setUserName(loginId);
+        register(authUserBO);
+        // satoken登录，传入loginId用户获取用户相关的角色和权限
+        StpUtil.login(loginId);
+        return StpUtil.getTokenInfo();
     }
 }

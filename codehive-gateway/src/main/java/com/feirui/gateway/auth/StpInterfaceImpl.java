@@ -46,12 +46,16 @@ public class StpInterfaceImpl implements StpInterface {
             List<AuthRole> authRoleList = new Gson()
                     .fromJson(value, new TypeToken<List<AuthRole>>() {
                     }.getType());
-            authList = authRoleList.stream().map(AuthRole::getRoleKey).collect(Collectors.toList());
+            authList = authRoleList.stream()
+                    .map(AuthRole::getRoleKey)
+                    .collect(Collectors.toList());
         } else if (authPermissionPrefix.equals(prefix)) {
             List<AuthPermission> authPermissionList = new Gson()
                     .fromJson(value, new TypeToken<List<AuthPermission>>() {
                     }.getType());
-            authList = authPermissionList.stream().map(AuthPermission::getPermissionKey).collect(Collectors.toList());
+            authList = authPermissionList.stream()
+                    .map(AuthPermission::getPermissionKey)
+                    .collect(Collectors.toList());
         }
         // 返回此 loginId 拥有的角色/权限列表
         return authList;

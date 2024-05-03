@@ -49,7 +49,7 @@
             <artifactId>sa-token-reactor-spring-boot-starter</artifactId>
             <version>1.37.0</version>
         </dependency>
-        <!-- Sa-Token 整合 Redis （使用 jackson 序列化方式） -->
+        <!-- Sa-Token 整合 Redis （使用 jackson 序列化方式）：实际就是整合了redis和jackson的坐标 -->
         <dependency>
             <groupId>cn.dev33</groupId>
             <artifactId>sa-token-redis-jackson</artifactId>
