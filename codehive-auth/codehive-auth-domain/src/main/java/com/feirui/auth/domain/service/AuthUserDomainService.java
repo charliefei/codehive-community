@@ -126,6 +126,7 @@ public class AuthUserDomainService {
         }
         AuthUserBO authUserBO = new AuthUserBO();
         authUserBO.setUserName(loginId);
+        // 扫码的同时未注册的新用户自动完成注册操作
         register(authUserBO);
         // satoken登录，传入loginId用户获取用户相关的角色和权限
         StpUtil.login(loginId);

@@ -16,7 +16,7 @@ import java.util.Optional;
 @RestController
 @Slf4j
 public class WxController {
-    private static final String token = "wx_token_fr";
+    private static final String token = "feirui";
     @Resource
     private WxMsgHandlerFactory wxMsgHandlerFactory;
 
