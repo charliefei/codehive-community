@@ -138,6 +138,13 @@
         </where>;
     </select>
 
+    <!-- 查询某一分类下题目数量 -->
+    <select id="querySubjectCount" resultType="java.lang.Integer">
+        select count(distinct subject_id)
+        from subject_mapping
+        where category_id = #{categoryId};
+    </select>
+
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
         insert into subject_category(category_name, category_type, image_url, parent_id, created_by, created_time, update_by, update_time, is_deleted)

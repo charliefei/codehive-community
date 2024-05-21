@@ -3,6 +3,7 @@ package com.feirui.oss.adapter;
 import com.feirui.oss.entity.FileInfo;
 import com.feirui.oss.utils.MinioUtil;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -13,6 +14,12 @@ import java.util.Objects;
 public class MinioOssAdapter implements OssAdapter {
     @Resource
     private MinioUtil minioUtil;
+
+    /**
+     * minioUrl
+     */
+    @Value("${minio.url}")
+    private String url;
 
     @Override
     @SneakyThrows
@@ -41,6 +48,12 @@ public class MinioOssAdapter implements OssAdapter {
     @SneakyThrows
     public List<String> getAllBucket() {
         return minioUtil.getAllBucket();
+    }
+
+    @Override
+    @SneakyThrows
+    public String getUrl(String bucket, String objectName) {
+        return url + "/" + bucket + "/" + objectName;
     }
 
     @Override

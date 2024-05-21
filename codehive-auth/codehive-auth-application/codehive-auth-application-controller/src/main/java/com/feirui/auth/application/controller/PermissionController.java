@@ -85,7 +85,7 @@ public class PermissionController {
     public Result<List<String>> getPermission(String userName) {
         try {
             log.info("PermissionController.getPermission.userName:{}", userName);
-            Preconditions.checkArgument(!StringUtils.isBlank(userName), "用户id不能为空");
+            Preconditions.checkArgument(!StringUtils.isBlank(userName), "用户userName不能为空");
             return Result.ok(authPermissionDomainService.getPermission(userName));
         } catch (Exception e) {
             log.error("PermissionController.getPermission.error:{}", e.getMessage(), e);

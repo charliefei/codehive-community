@@ -70,4 +70,14 @@ public class SubjectCategoryServiceImpl implements SubjectCategoryService {
     public List<SubjectCategory> queryCategory(SubjectCategory subjectCategory) {
         return this.subjectCategoryDao.queryCategoryList(subjectCategory);
     }
+
+    /**
+     * 查询分类下题目数量
+     * @param categoryId 分类id
+     * @return 分类下题数
+     */
+    @Override
+    public Integer querySubjectCount(Long categoryId) {
+        return this.subjectCategoryDao.querySubjectCount(categoryId);
+    }
 }

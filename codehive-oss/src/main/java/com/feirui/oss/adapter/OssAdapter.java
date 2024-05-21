@@ -23,6 +23,11 @@ public interface OssAdapter {
     List<String> getAllBucket();
 
     /**
+     * 获取文件路径
+     */
+    String getUrl(String bucket, String objectName);
+
+    /**
      * 列出所有桶和文件
      */
     List<FileInfo> getAllFile(String bucket);

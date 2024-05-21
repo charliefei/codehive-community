@@ -2,7 +2,9 @@ package com.feirui.subject.application.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.feirui.subject.application.convert.SubjectCategoryDTOConverter;
+import com.feirui.subject.application.convert.SubjectLabelDTOConverter;
 import com.feirui.subject.application.dto.SubjectCategoryDTO;
+import com.feirui.subject.application.dto.SubjectLabelDTO;
 import com.feirui.subject.common.entity.Result;
 import com.feirui.subject.common.enums.CategoryTypeEnum;
 import com.feirui.subject.domain.bo.SubjectCategoryBO;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/subject/category")
@@ -84,6 +87,35 @@ public class SubjectCategoryController {
         }
     }
 
+    /**
+     * 查询分类及标签一次性
+     */
+    @PostMapping("/queryCategoryAndLabel")
+    public Result<List<SubjectCategoryDTO>> queryCategoryAndLabel(@RequestBody SubjectCategoryDTO subjectCategoryDTO) {
+        try {
+            if (log.isInfoEnabled()) {
+                log.info("SubjectCategoryController.queryCategoryAndLabel.dto:{}"
+                        , JSON.toJSONString(subjectCategoryDTO));
+            }
+            // 传过来的id只能是一级分类的id
+            Preconditions.checkNotNull(subjectCategoryDTO.getId(), "分类id不能为空");
+            SubjectCategoryBO subjectCategoryBO = SubjectCategoryDTOConverter.INSTANCE.
+                    convert(subjectCategoryDTO);
+            List<SubjectCategoryBO> categoryBOList = subjectCategoryDomainService
+                    .queryCategoryAndLabel(subjectCategoryBO);
+            List<SubjectCategoryDTO> dtoList = categoryBOList.stream().map(bo -> {
+                SubjectCategoryDTO dto = SubjectCategoryDTOConverter.INSTANCE.convert(bo);
+                List<SubjectLabelDTO> labelDTOList = SubjectLabelDTOConverter.INSTANCE.convert(bo.getLabelBOList());
+                dto.setLabelDTOList(labelDTOList);
+                return dto;
+            }).collect(Collectors.toList());
+            return Result.ok(dtoList);
+        } catch (Exception e) {
+            log.error("SubjectCategoryController.queryPrimaryCategory.error:{}", e.getMessage(), e);
+            return Result.fail("查询失败");
+        }
+    }
+
     @PostMapping("/update")
     public Result<Boolean> update(@RequestBody SubjectCategoryDTO dto) {
         try {
@@ -104,7 +136,7 @@ public class SubjectCategoryController {
     public Result<Boolean> delete(@RequestBody SubjectCategoryDTO dto) {
         try {
             if (log.isInfoEnabled()) {
-                log.info("update.dto {}", JSON.toJSONString(dto));
+                log.info("delete.dto {}", JSON.toJSONString(dto));
             }
             SubjectCategoryBO bo = SubjectCategoryDTOConverter.INSTANCE
                     .convert(dto);

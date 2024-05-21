@@ -24,4 +24,9 @@ public interface SubjectCategoryDomainService {
      * 删除分类
      */
     Boolean delete(SubjectCategoryBO bo);
+
+    /**
+     * 查询分类及其标签信息
+     */
+    List<SubjectCategoryBO> queryCategoryAndLabel(SubjectCategoryBO subjectCategoryBO);
 }

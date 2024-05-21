@@ -1,6 +1,7 @@
 package com.feirui.auth.application.controller;
 
 import cn.dev33.satoken.stp.SaTokenInfo;
+import cn.dev33.satoken.stp.StpUtil;
 import com.alibaba.fastjson.JSON;
 import com.feirui.auth.application.convert.AuthUserDTOConverter;
 import com.feirui.auth.domain.bo.AuthUserBO;
@@ -125,6 +126,19 @@ public class UserController {
         } catch (Exception e) {
             log.error("UserController.doLogin.error:{}", e.getMessage(), e);
             return Result.fail("用户登录失败");
+        }
+    }
+
+    @RequestMapping("logOut")
+    public Result logOut(@RequestParam("userName") String userName) {
+        try {
+            log.info("UserController.logOut.userName:{}", userName);
+            Preconditions.checkArgument(!StringUtils.isBlank(userName), "用户名不能为空");
+            StpUtil.logout(userName);
+            return Result.ok();
+        } catch (Exception e) {
+            log.error("UserController.logOut.error:{}", e.getMessage(), e);
+            return Result.fail("用户登出失败");
         }
     }
 }

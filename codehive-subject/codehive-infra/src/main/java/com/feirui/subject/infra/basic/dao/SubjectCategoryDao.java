@@ -69,6 +69,16 @@ public interface SubjectCategoryDao {
      */
     int deleteById(Long id);
 
+    /**
+     * 查询分类
+     */
     List<SubjectCategory> queryCategoryList(SubjectCategory subjectCategory);
+
+    /**
+     * 查询分类下题目数量
+     * @param categoryId 分类id
+     * @return 分类下题数
+     */
+    Integer querySubjectCount(Long categoryId);
 }
 

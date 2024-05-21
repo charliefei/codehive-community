@@ -125,6 +125,7 @@ public class AuthUserDomainService {
             return null;
         }
         AuthUserBO authUserBO = new AuthUserBO();
+        // 微信给的openId就是satoken的loginId，loginId又对应数据库用户表里的username字段
         authUserBO.setUserName(loginId);
         // 扫码的同时未注册的新用户自动完成注册操作
         register(authUserBO);
