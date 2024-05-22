@@ -13,12 +13,18 @@ import com.feirui.subject.infra.basic.entity.SubjectMapping;
 import com.feirui.subject.infra.basic.service.SubjectCategoryService;
 import com.feirui.subject.infra.basic.service.impl.SubjectLabelServiceImpl;
 import com.feirui.subject.infra.basic.service.impl.SubjectMappingServiceImpl;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,6 +36,8 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
     private SubjectMappingServiceImpl subjectMappingService;
     @Resource
     private SubjectLabelServiceImpl subjectLabelService;
+    @Resource
+    private ThreadPoolExecutor labelThreadPool;
 
     public void add(SubjectCategoryBO bo) {
         if (log.isInfoEnabled()) {
@@ -75,6 +83,7 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
         return update > 0;
     }
 
+    @SneakyThrows
     @Override
     public List<SubjectCategoryBO> queryCategoryAndLabel(SubjectCategoryBO subjectCategoryBO) {
         // 查询该一级分类下的所有二级分类
@@ -85,14 +94,32 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
 
         List<SubjectCategoryBO> categoryBOList = SubjectCategoryConverter.INSTANCE.convert(categoryList);
         // 查询每一个二级分类下的所有标签
+        List<FutureTask<Map<Long, List<SubjectLabelBO>>>> futureTasks = new LinkedList<>();
+        Map<Long, List<SubjectLabelBO>> map = new HashMap<>();
         categoryBOList.forEach(categoryBO -> {
-            List<SubjectMapping> mappingList = subjectMappingService.queryMappingsByCategoryId(categoryBO.getId());
-            if (CollectionUtils.isEmpty(mappingList)) return;
-            List<Long> labelIdList = mappingList.stream().map(SubjectMapping::getLabelId).collect(Collectors.toList());
-            List<SubjectLabel> labelList = subjectLabelService.queryLabelsByIds(labelIdList);
-            List<SubjectLabelBO> labelBOList = SubjectLabelConverter.INSTANCE.convert(labelList);
-            categoryBO.setLabelBOList(labelBOList);
+            FutureTask<Map<Long, List<SubjectLabelBO>>> futureTask = new FutureTask<>(() -> getLabelBOMap(categoryBO));
+            futureTasks.add(futureTask);
+            labelThreadPool.submit(futureTask);
         });
+
+        for (FutureTask<Map<Long, List<SubjectLabelBO>>> futureTask : futureTasks) {
+            Map<Long, List<SubjectLabelBO>> resultMap = futureTask.get();
+            if (CollectionUtils.isEmpty(resultMap)) continue;
+            map.putAll(resultMap);
+        }
+
+        categoryBOList.forEach(categoryBO -> categoryBO.setLabelBOList(map.get(categoryBO.getId())));
         return categoryBOList;
+    }
+
+    public Map<Long, List<SubjectLabelBO>> getLabelBOMap(SubjectCategoryBO categoryBO) {
+        Map<Long, List<SubjectLabelBO>> labelBOMap = new HashMap<>();
+        List<SubjectMapping> mappingList = subjectMappingService.queryMappingsByCategoryId(categoryBO.getId());
+        if (CollectionUtils.isEmpty(mappingList)) return labelBOMap;
+        List<Long> labelIdList = mappingList.stream().map(SubjectMapping::getLabelId).collect(Collectors.toList());
+        List<SubjectLabel> labelList = subjectLabelService.queryLabelsByIds(labelIdList);
+        List<SubjectLabelBO> labelBOList = SubjectLabelConverter.INSTANCE.convert(labelList);
+        labelBOMap.put(categoryBO.getId(), labelBOList);
+        return labelBOMap;
     }
 }
