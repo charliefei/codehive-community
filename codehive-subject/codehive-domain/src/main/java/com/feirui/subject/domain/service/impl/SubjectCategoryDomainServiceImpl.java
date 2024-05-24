@@ -91,8 +91,8 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
         subjectCategory.setParentId(subjectCategoryBO.getId());
         subjectCategory.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getStatus());
         List<SubjectCategory> categoryList = subjectCategoryService.queryCategory(subjectCategory);
-
         List<SubjectCategoryBO> categoryBOList = SubjectCategoryConverter.INSTANCE.convert(categoryList);
+
         // 查询每一个二级分类下的所有标签
         List<FutureTask<Map<Long, List<SubjectLabelBO>>>> futureTasks = new LinkedList<>();
         Map<Long, List<SubjectLabelBO>> map = new HashMap<>();
@@ -101,14 +101,17 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
             futureTasks.add(futureTask);
             labelThreadPool.submit(futureTask);
         });
-
         for (FutureTask<Map<Long, List<SubjectLabelBO>>> futureTask : futureTasks) {
             Map<Long, List<SubjectLabelBO>> resultMap = futureTask.get();
             if (CollectionUtils.isEmpty(resultMap)) continue;
             map.putAll(resultMap);
         }
+        categoryBOList.forEach(categoryBO -> {
+            if (!CollectionUtils.isEmpty(map.get(categoryBO.getId()))) {
+                categoryBO.setLabelBOList(map.get(categoryBO.getId()));
+            }
+        });
 
-        categoryBOList.forEach(categoryBO -> categoryBO.setLabelBOList(map.get(categoryBO.getId())));
         return categoryBOList;
     }
 
