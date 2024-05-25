@@ -11,14 +11,13 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
-@Component
-public class CacheUtil<V> {
+public class CacheUtil {
     private static final Cache<String, String> localCache = CacheBuilder.newBuilder()
             .maximumSize(5000)
             .expireAfterWrite(10, TimeUnit.SECONDS)
             .build();
 
-    public List<V> getCacheValue(String cacheKey, Class<V> resultType, Supplier<List<V>> supplier) {
+    public static <V> List<V> getCacheValue(String cacheKey, Class<V> resultType, Supplier<List<V>> supplier) {
         List<V> result;
         String cacheValue = localCache.getIfPresent(cacheKey);
         if (StringUtils.hasLength(cacheValue)) {

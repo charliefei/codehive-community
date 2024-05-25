@@ -7,19 +7,17 @@ import com.feirui.subject.domain.bo.SubjectLabelBO;
 import com.feirui.subject.domain.convert.SubjectCategoryConverter;
 import com.feirui.subject.domain.convert.SubjectLabelConverter;
 import com.feirui.subject.domain.service.SubjectCategoryDomainService;
+import com.feirui.subject.domain.utils.CacheUtil;
 import com.feirui.subject.infra.basic.entity.SubjectCategory;
 import com.feirui.subject.infra.basic.entity.SubjectLabel;
 import com.feirui.subject.infra.basic.entity.SubjectMapping;
 import com.feirui.subject.infra.basic.service.SubjectCategoryService;
 import com.feirui.subject.infra.basic.service.impl.SubjectLabelServiceImpl;
 import com.feirui.subject.infra.basic.service.impl.SubjectMappingServiceImpl;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -28,16 +26,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainService {
-    private static final Cache<String, String> localCache = CacheBuilder.newBuilder()
-            .maximumSize(5000)
-            .expireAfterWrite(10, TimeUnit.SECONDS)
-            .build();
     @Resource
     private SubjectCategoryService subjectCategoryService;
     @Resource
@@ -93,18 +86,10 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
 
     @Override
     public List<SubjectCategoryBO> queryCategoryAndLabel(SubjectCategoryBO subjectCategoryBO) {
-        String cacheKey = "categoryAndLabel." + subjectCategoryBO.getId();
-        String cacheValue = localCache.getIfPresent(cacheKey);
-        List<SubjectCategoryBO> subjectCategoryBOList;
-        if (StringUtils.hasLength(cacheValue)) {
-            // 缓存有，返回缓存数据
-            subjectCategoryBOList = JSON.parseArray(cacheValue, SubjectCategoryBO.class);
-        } else {
-            // 缓存无，查询数据库数据返回，并设置缓存
-            subjectCategoryBOList = getSubjectCategoryBOS(subjectCategoryBO.getId());
-            localCache.put(cacheKey, JSON.toJSONString(subjectCategoryBOList));
-        }
-        return subjectCategoryBOList;
+        Long id = subjectCategoryBO.getId();
+        String cacheKey = "categoryAndLabel." + id;
+        return CacheUtil.getCacheValue(cacheKey, SubjectCategoryBO.class,
+                () -> getSubjectCategoryBOS(id));
     }
 
     @SneakyThrows
