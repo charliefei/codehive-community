@@ -5,36 +5,37 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 登录上下文对象
+ * 登陆上下文容器
  */
 public class LoginContextHolder {
-    private static final InheritableThreadLocal<Map<String, Object>> THREAD_LOCAL
-            = new InheritableThreadLocal<>();
 
-    public static void set(String key, Object val) {
-        Map<String, Object> map = getThreadLocalMap();
-        map.put(key, val);
+    private static final InheritableThreadLocal<Map<String, Object>> CONTEXT_HOLDER = new InheritableThreadLocal<>();
+
+    public static void set(String key, Object value) {
+        Map<String, Object> contextMap = getContextMap();
+        contextMap.put(key, value);
     }
 
     public static Object get(String key) {
-        Map<String, Object> threadLocalMap = getThreadLocalMap();
-        return threadLocalMap.get(key);
+        Map<String, Object> contextMap = getContextMap();
+        return contextMap.get(key);
     }
 
     public static String getLoginId() {
-        return (String) getThreadLocalMap().get("loginId");
+        return (String) get("loginId");
     }
 
     public static void remove() {
-        THREAD_LOCAL.remove();
+        CONTEXT_HOLDER.remove();
     }
 
-    public static Map<String, Object> getThreadLocalMap() {
-        Map<String, Object> map = THREAD_LOCAL.get();
-        if (Objects.isNull(map)) {
-            map = new ConcurrentHashMap<>();
-            THREAD_LOCAL.set(map);
+    private static Map<String, Object> getContextMap() {
+        Map<String, Object> contextMap = CONTEXT_HOLDER.get();
+        if (Objects.isNull(contextMap)) {
+            contextMap = new ConcurrentHashMap<>();
+            CONTEXT_HOLDER.set(contextMap);
         }
-        return map;
+        return contextMap;
     }
+
 }
