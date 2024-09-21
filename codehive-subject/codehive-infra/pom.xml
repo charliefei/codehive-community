@@ -41,6 +41,12 @@
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>3.4.0</version>
         </dependency>
+        <!-- elastic search -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+            <version>2.4.2</version>
+        </dependency>
         <dependency>
             <groupId>com.feirui.codehive</groupId>
             <artifactId>codehive-common</artifactId>
