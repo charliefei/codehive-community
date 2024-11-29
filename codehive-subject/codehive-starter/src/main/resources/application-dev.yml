@@ -5,3 +5,8 @@ codehive:
     host: localhost
     port: 3306
     db: codehive
+  es:
+    cluster:
+      esConfigs:
+        - name: 73438a827b55
+          nodes: 117.72.14.166:9200

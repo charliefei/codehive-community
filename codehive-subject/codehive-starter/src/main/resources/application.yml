@@ -26,3 +26,8 @@ spring:
           enabled: true
         config:
           enabled: true
+es:
+  cluster:
+    esConfigs:
+      - name: ${codehive.es.cluster.esConfigs[0].name}
+        nodes: ${codehive.es.cluster.esConfigs[0].nodes}
