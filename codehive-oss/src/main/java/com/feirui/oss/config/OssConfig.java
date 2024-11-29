@@ -1,5 +1,6 @@
 package com.feirui.oss.config;
 
+import com.feirui.oss.adapter.AliyunOssAdapter;
 import com.feirui.oss.adapter.MinioOssAdapter;
 import com.feirui.oss.adapter.OssAdapter;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +16,8 @@ public class OssConfig {
     public OssAdapter ossAdapter() {
         if ("minio".equals(ossType)) {
             return new MinioOssAdapter();
+        } else if ("aliyun".equals(ossType)) {
+            return new AliyunOssAdapter();
         } else {
             throw new IllegalArgumentException("未找到对应的文件存储处理器");
         }

@@ -4,5 +4,10 @@ minio:
   url: http://192.168.1.105:9000
   accessKey: minioadmin
   secretKey: minioadmin
+aliyun:
+  endpoint: oss-cn-beijing.aliyuncs.com
+  accessKeyId: xxx
+  accessKeySecret: xxx
+  bucketName: codehive
 oss:
-  type: minio
+  type: aliyun

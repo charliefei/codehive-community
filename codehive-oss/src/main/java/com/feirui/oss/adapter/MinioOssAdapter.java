@@ -3,7 +3,9 @@ package com.feirui.oss.adapter;
 import com.feirui.oss.entity.FileInfo;
 import com.feirui.oss.utils.MinioUtil;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -11,6 +13,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
 
+@Slf4j
 public class MinioOssAdapter implements OssAdapter {
     @Resource
     private MinioUtil minioUtil;
@@ -28,19 +31,18 @@ public class MinioOssAdapter implements OssAdapter {
     }
 
     @Override
-    @SneakyThrows
     public void uploadFile(MultipartFile uploadFile, String bucket, String objectName) {
-        minioUtil.createBucket(bucket);
-        if (Objects.nonNull(objectName)) {
-            minioUtil.uploadFile(
-                    uploadFile.getInputStream(),
-                    bucket,
-                    objectName + "/" + uploadFile.getName());
-        } else {
-            minioUtil.uploadFile(
-                    uploadFile.getInputStream(),
-                    bucket,
-                    uploadFile.getName());
+        try {
+            minioUtil.createBucket(bucket);
+            if (StringUtils.hasLength(objectName)) {
+                minioUtil.uploadFile(uploadFile.getInputStream(),
+                        bucket, objectName + "/" + uploadFile.getOriginalFilename());
+            } else {
+                minioUtil.uploadFile(uploadFile.getInputStream(),
+                        bucket, uploadFile.getOriginalFilename());
+            }
+        } catch (Exception e) {
+            log.error("minio upload file error: {}", e.getMessage(), e);
         }
     }
 

@@ -1,12 +1,15 @@
 package com.feirui.oss.service;
 
 import com.feirui.oss.adapter.OssAdapter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @Service
+@Slf4j
 public class FileService {
     private final OssAdapter ossAdapter;
 
@@ -30,7 +33,12 @@ public class FileService {
      */
     public String uploadFile(MultipartFile uploadFile, String bucket, String objectName) {
         ossAdapter.uploadFile(uploadFile, bucket, objectName);
-        objectName = objectName + "/" + uploadFile.getOriginalFilename();
-        return ossAdapter.getUrl(bucket, objectName);
+        if (StringUtils.hasLength(objectName))
+            objectName = objectName + "/" + uploadFile.getOriginalFilename();
+        else
+            objectName = uploadFile.getOriginalFilename();
+        String url = ossAdapter.getUrl(bucket, objectName);
+        log.info("oss upload file success! url: {}", url);
+        return url;
     }
 }
