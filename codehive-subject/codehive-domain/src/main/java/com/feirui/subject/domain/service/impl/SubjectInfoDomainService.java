@@ -2,14 +2,18 @@ package com.feirui.subject.domain.service.impl;
 
 import com.feirui.subject.common.entity.PageResult;
 import com.feirui.subject.common.enums.IsDeletedFlagEnum;
+import com.feirui.subject.common.utils.IdWorkerUtil;
 import com.feirui.subject.domain.bo.SubjectInfoBO;
 import com.feirui.subject.domain.bo.SubjectOptionBO;
 import com.feirui.subject.domain.convert.SubjectInfoConverter;
+import com.feirui.subject.domain.redis.RedisUtil;
 import com.feirui.subject.domain.service.strategy.SubjectTypeHandlerFactory;
 import com.feirui.subject.domain.service.strategy.handler.SubjectTypeHandler;
 import com.feirui.subject.infra.basic.entity.SubjectInfo;
+import com.feirui.subject.infra.basic.entity.SubjectInfoEs;
 import com.feirui.subject.infra.basic.entity.SubjectLabel;
 import com.feirui.subject.infra.basic.entity.SubjectMapping;
+import com.feirui.subject.infra.basic.service.SubjectEsService;
 import com.feirui.subject.infra.basic.service.SubjectInfoService;
 import com.feirui.subject.infra.basic.service.SubjectLabelService;
 import com.feirui.subject.infra.basic.service.SubjectMappingService;
@@ -20,6 +24,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.Collections;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +32,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class SubjectInfoDomainService {
+    private static final String RANK_KEY = "subject_rank";
     @Resource
     private SubjectInfoService subjectInfoService;
     @Resource
@@ -35,6 +41,10 @@ public class SubjectInfoDomainService {
     private SubjectMappingService subjectMappingService;
     @Resource
     private SubjectLabelService subjectLabelService;
+    @Resource
+    private SubjectEsService subjectEsService;
+    @Resource
+    private RedisUtil redisUtil;
 
     @Transactional(rollbackFor = Exception.class)
     public void add(SubjectInfoBO bo) {
@@ -64,6 +74,18 @@ public class SubjectInfoDomainService {
             });
         });
         subjectMappingService.saveBatch(subjectMappingList);
+        // 同步题目数据到es
+        SubjectInfoEs subjectInfoEs = new SubjectInfoEs();
+        subjectInfoEs.setDocId(new IdWorkerUtil(1, 1, 1).nextId());
+        subjectInfoEs.setSubjectId(subjectInfo.getId());
+        subjectInfoEs.setSubjectAnswer(bo.getSubjectAnswer());
+        subjectInfoEs.setCreateTime(new Date().getTime());
+        subjectInfoEs.setCreateUser(bo.getSettleName());
+        subjectInfoEs.setSubjectName(subjectInfo.getSubjectName());
+        subjectInfoEs.setSubjectType(subjectInfo.getSubjectType());
+        subjectEsService.insert(subjectInfoEs);
+        // redis放入zadd计入排行榜
+        // redisUtil.addScore(RANK_KEY, LoginContextHolder, 1);
     }
 
     public PageResult<SubjectInfoBO> getSubjectPage(SubjectInfoBO bo) {

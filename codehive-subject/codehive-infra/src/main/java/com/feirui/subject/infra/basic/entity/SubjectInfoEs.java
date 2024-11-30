@@ -1,35 +1,59 @@
 package com.feirui.subject.infra.basic.entity;
 
-import lombok.AllArgsConstructor;
+import com.feirui.subject.common.entity.PageInfo;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
+import lombok.EqualsAndHashCode;
 
-import java.util.Date;
+import java.io.Serializable;
+import java.math.BigDecimal;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Document(indexName = "subject_index")
-public class SubjectInfoEs {
+public class SubjectInfoEs extends PageInfo implements Serializable {
 
-    @Field(type = FieldType.Long)
-    @Id
-    private Long id;
+    /**
+     * 题目id
+     */
+    private Long subjectId;
 
-    @Field(type = FieldType.Text, analyzer = "ik_smart")
+    /**
+     * es文档id
+     */
+    private Long docId;
+
+    /**
+     * 题目名称
+     */
     private String subjectName;
 
-    @Field(type = FieldType.Text, analyzer = "ik_smart")
+    /**
+     * 题目答案
+     */
     private String subjectAnswer;
 
-    @Field(type = FieldType.Keyword)
+    /**
+     * 创建人
+     */
     private String createUser;
 
-    @Field(type = FieldType.Date, index = false)
-    private Date createDate;
+    /**
+     * 创建时间
+     */
+    private Long createTime;
+
+    /**
+     * 题目类型
+     */
+    private Integer subjectType;
+
+    /**
+     * es搜索关键字
+     */
+    private String keyWord;
+
+    /**
+     * es搜索分数
+     */
+    private BigDecimal score;
 
 }
