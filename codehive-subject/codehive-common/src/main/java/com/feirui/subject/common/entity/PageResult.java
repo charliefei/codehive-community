@@ -1,6 +1,8 @@
 package com.feirui.subject.common.entity;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -30,6 +32,7 @@ public class PageResult<T> implements Serializable {
     /**
      * 每页的具体数据
      */
+    @Setter(AccessLevel.NONE)
     private List<T> result = Collections.emptyList();
     /**
      * 每页的开始数据

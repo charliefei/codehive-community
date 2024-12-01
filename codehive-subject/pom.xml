@@ -12,9 +12,6 @@
         <module>codehive-infra</module>
         <module>codehive-starter</module>
         <module>codehive-subject-api</module>
-        <module>codehive-application/codehive-application-controller</module>
-        <module>codehive-application/codehive-application-job</module>
-        <module>codehive-application/codehive-application-mq</module>
     </modules>
 
     <properties>
