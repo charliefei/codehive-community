@@ -10,3 +10,8 @@ codehive:
       esConfigs:
         - name: 73438a827b55
           nodes: 117.72.14.166:9200
+  redis:
+    database: 1
+    host: localhost
+    port: 6379
+    password: 123456
