@@ -1,6 +1,6 @@
 package com.feirui.subject.application.interceptor;
 
-import com.feirui.subject.application.context.LoginContextHolder;
+import com.feirui.subject.common.context.LoginContextHolder;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import org.springframework.util.StringUtils;

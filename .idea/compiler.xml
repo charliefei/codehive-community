@@ -32,7 +32,6 @@
         <module name="codehive-application-job" />
         <module name="codehive-auth-starter" />
         <module name="codehive-application-controller" />
-        <module name="codehive-application" />
         <module name="codehive-auth-domain" />
         <module name="codehive-oss" />
         <module name="codehive-domain" />

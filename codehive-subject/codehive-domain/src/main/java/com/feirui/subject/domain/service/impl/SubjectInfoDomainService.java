@@ -1,5 +1,6 @@
 package com.feirui.subject.domain.service.impl;
 
+import com.feirui.subject.common.context.LoginContextHolder;
 import com.feirui.subject.common.entity.PageResult;
 import com.feirui.subject.common.enums.IsDeletedFlagEnum;
 import com.feirui.subject.common.utils.IdWorkerUtil;
@@ -80,7 +81,7 @@ public class SubjectInfoDomainService {
         subjectInfoEs.setSubjectId(subjectInfo.getId());
         subjectInfoEs.setSubjectAnswer(bo.getSubjectAnswer());
         subjectInfoEs.setCreateTime(new Date().getTime());
-        subjectInfoEs.setCreateUser(bo.getSettleName());
+        subjectInfoEs.setCreateUser(LoginContextHolder.getLoginId());
         subjectInfoEs.setSubjectName(subjectInfo.getSubjectName());
         subjectInfoEs.setSubjectType(subjectInfo.getSubjectType());
         subjectEsService.insert(subjectInfoEs);

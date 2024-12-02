@@ -29,7 +29,7 @@ public class LoginFilter implements GlobalFilter {
         if ("/auth/user/doLogin".equals(url)) {
             return chain.filter(exchange);
         }
-        // satoken解析token，得到loginId->对应用户表中的userName
+        // satoken解析token，得到loginId->对应用户表中的userName->微信扫码的openid
         SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
         String loginId = (String) tokenInfo.getLoginId();
         if (!StringUtils.hasLength(loginId)) {
