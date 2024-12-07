@@ -4,7 +4,7 @@ import cn.dev33.satoken.stp.StpInterface;
 import com.feirui.gateway.entity.AuthPermission;
 import com.feirui.gateway.entity.AuthRole;
 import com.feirui.gateway.redis.RedisUtil;
-import com.google.common.reflect.TypeToken;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.Gson;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;

@@ -25,6 +25,11 @@ public class GatewayExceptionHandler implements ErrorWebExceptionHandler {
     @Override
     public Mono<Void> handle(ServerWebExchange serverWebExchange, Throwable throwable) {
         ServerHttpRequest request = serverWebExchange.getRequest();
+        log.error("GatewayExceptionHandler.handle.log: uri={} reason={}",
+                request.getURI().getPath(),
+                throwable.getMessage(),
+                throwable);
+
         ServerHttpResponse response = serverWebExchange.getResponse();
         int code;
         String message;

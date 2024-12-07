@@ -141,8 +141,9 @@
     <!-- 查询某一分类下题目数量 -->
     <select id="querySubjectCount" resultType="java.lang.Integer">
         select count(distinct subject_id)
-        from subject_mapping
-        where category_id = #{categoryId};
+        from subject_mapping a,
+             subject_label b
+        where a.label_id = b.id and b.category_id = #{id}
     </select>
 
     <!--新增所有列-->

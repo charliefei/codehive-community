@@ -2,13 +2,13 @@ package com.feirui.gateway.filter;
 
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
+import com.google.gson.Gson;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -31,10 +31,8 @@ public class LoginFilter implements GlobalFilter {
         }
         // satoken解析token，得到loginId->对应用户表中的userName->微信扫码的openid
         SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
+        log.info("LoginFilter.filter.tokenInfo:{}", new Gson().toJson(tokenInfo));
         String loginId = (String) tokenInfo.getLoginId();
-        if (!StringUtils.hasLength(loginId)) {
-            throw new Exception("未获取到用户信息");
-        }
         // 将loginId放入header中传递给微服务使用
         ServerHttpRequest.Builder mutate = request.mutate();
         mutate.header("loginId", loginId);

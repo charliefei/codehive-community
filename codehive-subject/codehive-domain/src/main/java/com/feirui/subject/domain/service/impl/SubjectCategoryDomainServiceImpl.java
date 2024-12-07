@@ -102,6 +102,7 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
         List<SubjectCategoryBO> categoryBOList = SubjectCategoryConverter.INSTANCE.convert(categoryList);
 
         // 查询每一个二级分类下的所有标签
+        // todo 后续使用completableFuture优化一下，参考mallchat
         List<FutureTask<Map<Long, List<SubjectLabelBO>>>> futureTasks = new LinkedList<>();
         Map<Long, List<SubjectLabelBO>> map = new HashMap<>();
         categoryBOList.forEach(categoryBO -> {
@@ -123,7 +124,7 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
         return categoryBOList;
     }
 
-    public Map<Long, List<SubjectLabelBO>> getLabelBOMap(SubjectCategoryBO categoryBO) {
+    private Map<Long, List<SubjectLabelBO>> getLabelBOMap(SubjectCategoryBO categoryBO) {
         Map<Long, List<SubjectLabelBO>> labelBOMap = new HashMap<>();
         List<SubjectMapping> mappingList = subjectMappingService.queryMappingsByCategoryId(categoryBO.getId());
         if (CollectionUtils.isEmpty(mappingList)) return labelBOMap;
