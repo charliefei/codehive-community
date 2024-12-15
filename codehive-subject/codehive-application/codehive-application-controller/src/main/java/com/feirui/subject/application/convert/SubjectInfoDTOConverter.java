@@ -6,6 +6,8 @@ import com.feirui.subject.domain.bo.SubjectInfoBO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 /**
  * 题目信息dto转换器
  */
@@ -18,4 +20,6 @@ public interface SubjectInfoDTOConverter {
     PageResult<SubjectInfoDTO> convert(PageResult<SubjectInfoBO> boPageResult);
 
     SubjectInfoDTO convert(SubjectInfoBO boResult);
+
+    List<SubjectInfoDTO> convert(List<SubjectInfoBO> boList);
 }

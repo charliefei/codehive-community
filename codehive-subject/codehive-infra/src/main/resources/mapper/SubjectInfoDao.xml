@@ -176,6 +176,14 @@
         limit #{start}, #{pageSize}
     </select>
 
+    <select id="getContributeCountList" resultType="com.feirui.subject.infra.basic.entity.SubjectInfo">
+        select count(1) as subjectCount, created_by as createdBy
+        from subject_info
+        where is_deleted = 0 and created_by is not null
+        group by created_by
+        limit 5 offset 0
+    </select>
+
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
         insert into subject_info(subject_name, subject_difficult, settle_name, subject_type, subject_score,

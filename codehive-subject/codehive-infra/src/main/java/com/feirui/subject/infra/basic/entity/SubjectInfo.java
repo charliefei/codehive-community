@@ -39,5 +39,7 @@ public class SubjectInfo implements Serializable {
     private Date updateTime;
 
     private Integer isDeleted;
+
+    private Integer subjectCount;
 }
 

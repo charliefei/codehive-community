@@ -23,6 +23,7 @@ public class UserRpc {
         return UserInfo.builder()
                 .userName(result.getData().getUserName())
                 .nickName(result.getData().getNickName())
+                .avatar(result.getData().getAvatar())
                 .build();
     }
 }

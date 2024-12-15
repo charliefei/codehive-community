@@ -18,6 +18,8 @@ import com.feirui.subject.infra.basic.service.SubjectEsService;
 import com.feirui.subject.infra.basic.service.SubjectInfoService;
 import com.feirui.subject.infra.basic.service.SubjectLabelService;
 import com.feirui.subject.infra.basic.service.SubjectMappingService;
+import com.feirui.subject.infra.entity.UserInfo;
+import com.feirui.subject.infra.rpc.UserRpc;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +46,8 @@ public class SubjectInfoDomainService {
     private SubjectLabelService subjectLabelService;
     @Resource
     private SubjectEsService subjectEsService;
+    @Resource
+    private UserRpc userRpc;
     @Resource
     private RedisUtil redisUtil;
 
@@ -154,5 +158,21 @@ public class SubjectInfoDomainService {
         subjectInfoEs.setPageSize(subjectInfoBO.getPageSize());
         subjectInfoEs.setKeyWord(subjectInfoBO.getKeyWord());
         return subjectEsService.querySubjectList(subjectInfoEs);
+    }
+
+    public List<SubjectInfoBO> getContributeList() {
+        List<SubjectInfo>  contributeCountList = subjectInfoService.getContributeCountList();
+        if (CollectionUtils.isEmpty(contributeCountList)) {
+            return Collections.emptyList();
+        }
+        return contributeCountList.stream().map(item -> {
+            SubjectInfoBO subjectInfoBO = new SubjectInfoBO();
+            subjectInfoBO.setSubjectCount(item.getSubjectCount());
+            // createBy也就是出题人的loginId，即数据库里面的userName字段，微信扫码获取的openId
+            UserInfo userInfo = userRpc.getUserInfo(item.getCreatedBy());
+            subjectInfoBO.setCreateUser(userInfo.getNickName());
+            subjectInfoBO.setCreateUserAvatar(userInfo.getAvatar());
+            return subjectInfoBO;
+        }).collect(Collectors.toList());
     }
 }

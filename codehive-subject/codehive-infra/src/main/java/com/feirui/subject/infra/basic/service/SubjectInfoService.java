@@ -12,5 +12,7 @@ public interface SubjectInfoService extends IService<SubjectInfo> {
     int countByCondition(SubjectInfo subjectInfo, Long categoryId, Long labelId);
 
     List<SubjectInfo> queryPage(SubjectInfo subjectInfo, Long categoryId, Long labelId, int start, int pageSize);
+
+    List<SubjectInfo> getContributeCountList();
 }
 

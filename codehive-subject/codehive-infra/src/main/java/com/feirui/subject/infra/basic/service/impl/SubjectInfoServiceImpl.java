@@ -26,5 +26,10 @@ public class SubjectInfoServiceImpl extends ServiceImpl<SubjectInfoDao, SubjectI
     public List<SubjectInfo> queryPage(SubjectInfo subjectInfo, Long categoryId, Long labelId, int start, int pageSize) {
         return subjectInfoDao.queryPage(subjectInfo, categoryId, labelId, start, pageSize);
     }
+
+    @Override
+    public List<SubjectInfo> getContributeCountList() {
+        return subjectInfoDao.getContributeCountList();
+    }
 }
 
