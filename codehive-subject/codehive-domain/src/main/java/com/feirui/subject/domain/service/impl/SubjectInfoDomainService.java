@@ -21,15 +21,13 @@ import com.feirui.subject.infra.basic.service.SubjectMappingService;
 import com.feirui.subject.infra.entity.UserInfo;
 import com.feirui.subject.infra.rpc.UserRpc;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.Collections;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -89,8 +87,8 @@ public class SubjectInfoDomainService {
         subjectInfoEs.setSubjectName(subjectInfo.getSubjectName());
         subjectInfoEs.setSubjectType(subjectInfo.getSubjectType());
         subjectEsService.insert(subjectInfoEs);
-        // redis放入zadd计入排行榜
-        // redisUtil.addScore(RANK_KEY, LoginContextHolder, 1);
+        // 每次有人出题，用zset维护一个出题排行榜，score是出题数量，value是出题人loginId
+        redisUtil.addScore(RANK_KEY, LoginContextHolder.getLoginId(), 1);
     }
 
     public PageResult<SubjectInfoBO> getSubjectPage(SubjectInfoBO bo) {
@@ -161,18 +159,34 @@ public class SubjectInfoDomainService {
     }
 
     public List<SubjectInfoBO> getContributeList() {
-        List<SubjectInfo>  contributeCountList = subjectInfoService.getContributeCountList();
-        if (CollectionUtils.isEmpty(contributeCountList)) {
+        Set<ZSetOperations.TypedTuple<String>> rankZSet = redisUtil.rankWithScore(RANK_KEY, 0, 5);
+        if (log.isInfoEnabled()) {
+            log.info("getContributeList.rankZSet: {}", rankZSet);
+        }
+        if (CollectionUtils.isEmpty(rankZSet)) {
             return Collections.emptyList();
         }
-        return contributeCountList.stream().map(item -> {
+        return rankZSet.stream().map(item -> {
             SubjectInfoBO subjectInfoBO = new SubjectInfoBO();
-            subjectInfoBO.setSubjectCount(item.getSubjectCount());
-            // createBy也就是出题人的loginId，即数据库里面的userName字段，微信扫码获取的openId
-            UserInfo userInfo = userRpc.getUserInfo(item.getCreatedBy());
+            subjectInfoBO.setSubjectCount(item.getScore().intValue());
+            UserInfo userInfo = userRpc.getUserInfo(item.getValue());
             subjectInfoBO.setCreateUser(userInfo.getNickName());
             subjectInfoBO.setCreateUserAvatar(userInfo.getAvatar());
             return subjectInfoBO;
         }).collect(Collectors.toList());
+
+        // List<SubjectInfo>  contributeCountList = subjectInfoService.getContributeCountList();
+        // if (CollectionUtils.isEmpty(contributeCountList)) {
+        //     return Collections.emptyList();
+        // }
+        // return contributeCountList.stream().map(item -> {
+        //     SubjectInfoBO subjectInfoBO = new SubjectInfoBO();
+        //     subjectInfoBO.setSubjectCount(item.getSubjectCount());
+        //     // createBy也就是出题人的loginId，即数据库里面的userName字段，微信扫码获取的openId
+        //     UserInfo userInfo = userRpc.getUserInfo(item.getCreatedBy());
+        //     subjectInfoBO.setCreateUser(userInfo.getNickName());
+        //     subjectInfoBO.setCreateUserAvatar(userInfo.getAvatar());
+        //     return subjectInfoBO;
+        // }).collect(Collectors.toList());
     }
 }
