@@ -10,4 +10,4 @@ aliyun:
   accessKeySecret: xxx
   bucketName: codehive
 oss:
-  type: aliyun
+  type: local

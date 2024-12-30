@@ -35,11 +35,11 @@ public class AliyunOssAdapter implements OssAdapter {
         try {
             createBucket(bucket);
             if (StringUtils.hasLength(objectName)) {
-                ossClient.putObject(aliyunConfig.getBucketName(),
+                ossClient.putObject(bucket,
                         objectName + "/" + uploadFile.getOriginalFilename(),
                         new ByteArrayInputStream(uploadFile.getBytes()));
             } else {
-                ossClient.putObject(aliyunConfig.getBucketName(),
+                ossClient.putObject(bucket,
                         uploadFile.getOriginalFilename(),
                         new ByteArrayInputStream(uploadFile.getBytes()));
             }
@@ -56,7 +56,7 @@ public class AliyunOssAdapter implements OssAdapter {
     @Override
     public String getUrl(String bucket, String objectName) {
         return "https://" +
-                aliyunConfig.getBucketName() +
+                bucket +
                 "." +
                 aliyunConfig.getEndpoint() +
                 "/" +
