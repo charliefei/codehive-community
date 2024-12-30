@@ -2,6 +2,7 @@ package com.feirui.oss.adapter;
 
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.model.Bucket;
+import com.aliyun.oss.model.ObjectListing;
 import com.feirui.oss.config.AliyunConfig;
 import com.feirui.oss.entity.FileInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,12 +65,21 @@ public class AliyunOssAdapter implements OssAdapter {
 
     @Override
     public List<FileInfo> getAllFile(String bucket) {
-        return Collections.emptyList();
+        ObjectListing objectListing = ossClient.listObjects(bucket);
+        return objectListing.getObjectSummaries().stream().map(ossObjectSummary -> {
+            FileInfo fileInfo = new FileInfo();
+            fileInfo.setFileName(ossObjectSummary.getKey());
+            fileInfo.setEtag(ossObjectSummary.getETag());
+            // OSS没有文件夹的概念，所有元素都是以文件来存储。创建文件夹本质上来说是创建了一个大小为0并以正斜线（/）结尾的文件。
+            // 这个文件可以被上传和下载，控制台会对以正斜线（/）结尾的文件以文件夹的方式展示。
+            fileInfo.setDirectoryFlag(ossObjectSummary.getKey().endsWith("/"));
+            return fileInfo;
+        }).collect(Collectors.toList());
     }
 
     @Override
     public InputStream downloadFile(String bucket, String objectName) {
-        return null;
+        return ossClient.getObject(bucket, objectName).getObjectContent();
     }
 
     @Override
