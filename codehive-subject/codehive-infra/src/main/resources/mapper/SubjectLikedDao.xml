@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.feirui.subject.infra.basic.dao.SubjectLikedDao">
+
+    <resultMap type="com.feirui.subject.infra.basic.entity.SubjectLiked" id="SubjectLikedMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="subjectId" column="subject_id" jdbcType="INTEGER"/>
+        <result property="likeUserId" column="like_user_id" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="createdBy" column="created_by" jdbcType="VARCHAR"/>
+        <result property="createdTime" column="created_time" jdbcType="TIMESTAMP"/>
+        <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="isDeleted" column="is_deleted" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into subject_liked(subject_id, like_user_id, status, created_by, created_time, update_by,
+        update_time, is_deleted)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.subjectId}, #{entity.likeUserId}, #{entity.status}, #{entity.createdBy}, #{entity.createdTime},
+            #{entity.updateBy}, #{entity.updateTime}, #{entity.isDeleted})
+        </foreach>
+    </insert>
+
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into subject_liked(subject_id, like_user_id, status, created_by, created_time, update_by,
+        update_time, is_deleted)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.subjectId}, #{entity.likeUserId}, #{entity.status}, #{entity.createdBy}, #{entity.createdTime},
+            #{entity.updateBy}, #{entity.updateTime}, #{entity.isDeleted})
+        </foreach>
+        on duplicate key update
+        subject_id = values(subject_id) , like_user_id = values(like_user_id) , status = values(status) , created_by =
+        values(created_by) , created_time = values(created_time) , update_by = values(update_by) , update_time =
+        values(update_time) , is_deleted = values(is_deleted)
+    </insert>
+
+</mapper>
+
