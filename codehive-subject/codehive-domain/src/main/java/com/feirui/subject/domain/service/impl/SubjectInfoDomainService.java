@@ -45,6 +45,8 @@ public class SubjectInfoDomainService {
     @Resource
     private SubjectEsService subjectEsService;
     @Resource
+    private SubjectLikedDomainService subjectLikedDomainService;
+    @Resource
     private UserRpc userRpc;
     @Resource
     private RedisUtil redisUtil;
@@ -131,6 +133,8 @@ public class SubjectInfoDomainService {
 
         List<String> labelNameList = getLabelNameList(subjectInfo.getId());
         infoBO.setLabelName(labelNameList);
+        infoBO.setLiked(subjectLikedDomainService.isLiked(subjectInfoBO.getId().toString(), LoginContextHolder.getLoginId()));
+        infoBO.setLikedCount(subjectLikedDomainService.getLikedCount(subjectInfoBO.getId().toString()));
         return infoBO;
     }
 
