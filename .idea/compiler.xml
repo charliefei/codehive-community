@@ -21,6 +21,7 @@
       <directory url="file://$PROJECT_DIR$/codehive-auth/codehive-auth-starter/src/main/resources/archetype-resources" includeSubdirectories="true" />
       <directory url="file://$PROJECT_DIR$/codehive-auth/codehive-auth-api/src/main/resources/archetype-resources" includeSubdirectories="true" />
       <directory url="file://$PROJECT_DIR$/codehive-wx/src/main/resources/archetype-resources" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/codehive-practice/src/main/resources/archetype-resources" includeSubdirectories="true" />
     </excludeFromCompile>
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
@@ -38,6 +39,7 @@
         <module name="codehive-auth-common" />
         <module name="codehive-wx" />
         <module name="codehive-starter" />
+        <module name="codehive-practice-api" />
         <module name="codehive-auth-api" />
         <module name="codehive-common" />
         <module name="codehive-subject-api" />
@@ -45,6 +47,7 @@
         <module name="codehive-application-mq" />
         <module name="codehive-gateway" />
         <module name="codehive-auth-application-job" />
+        <module name="codehive-practice-server" />
         <module name="codehive-auth-application-controller" />
         <module name="codehive-auth-infra" />
       </profile>
