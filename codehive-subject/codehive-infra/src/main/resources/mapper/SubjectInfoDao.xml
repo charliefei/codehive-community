@@ -184,6 +184,23 @@
         limit 5 offset 0
     </select>
 
+    <!-- 查询当前题目的上一题或者下一题的主键id，cursor表明方向 -->
+    <select id="querySubjectIdCursor" resultType="java.lang.Long">
+        select *
+        from subject_info a,
+        subject_mapping b
+        where a.id = b.subject_id
+        and b.category_id = #{categoryId}
+        and b.label_id = #{labelId}
+        <if test="cursor != null and cursor == 1">
+            and a.id > #{subjectId} # 下一个题目id大于当前题目
+        </if>
+        <if test="cursor != null and cursor == 0">
+            and a.id &lt; #{subjectId} # 上一个题目id小于当前题目
+        </if>
+        limit 0, 1;
+    </select>
+
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
         insert into subject_info(subject_name, subject_difficult, settle_name, subject_type, subject_score,

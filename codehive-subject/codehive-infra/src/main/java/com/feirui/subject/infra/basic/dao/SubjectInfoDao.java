@@ -21,5 +21,10 @@ public interface SubjectInfoDao extends BaseMapper<SubjectInfo> {
                                 @Param("pageSize") int pageSize);
 
     List<SubjectInfo> getContributeCountList();
+
+    Long querySubjectIdCursor(@Param("subjectId") Long subjectId,
+                              @Param("categoryId") Long categoryId,
+                              @Param("labelId") Long labelId,
+                              @Param("cursor") int cursor);
 }
 

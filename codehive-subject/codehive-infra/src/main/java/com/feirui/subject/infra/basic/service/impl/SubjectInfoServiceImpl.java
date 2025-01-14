@@ -31,5 +31,10 @@ public class SubjectInfoServiceImpl extends ServiceImpl<SubjectInfoDao, SubjectI
     public List<SubjectInfo> getContributeCountList() {
         return subjectInfoDao.getContributeCountList();
     }
+
+    @Override
+    public Long querySubjectIdCursor(Long subjectId, Long categoryId, Long labelId, int cursor) {
+        return subjectInfoDao.querySubjectIdCursor(subjectId, categoryId, labelId, cursor);
+    }
 }
 

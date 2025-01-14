@@ -14,5 +14,7 @@ public interface SubjectInfoService extends IService<SubjectInfo> {
     List<SubjectInfo> queryPage(SubjectInfo subjectInfo, Long categoryId, Long labelId, int start, int pageSize);
 
     List<SubjectInfo> getContributeCountList();
+
+    Long querySubjectIdCursor(Long subjectId, Long categoryId, Long labelId, int cursor);
 }
 

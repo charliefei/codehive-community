@@ -135,7 +135,24 @@ public class SubjectInfoDomainService {
         infoBO.setLabelName(labelNameList);
         infoBO.setLiked(subjectLikedDomainService.isLiked(subjectInfoBO.getId().toString(), LoginContextHolder.getLoginId()));
         infoBO.setLikedCount(subjectLikedDomainService.getLikedCount(subjectInfoBO.getId().toString()));
+        assembleSubjectCursor(subjectInfoBO, infoBO);
         return infoBO;
+    }
+
+    /**
+     * 获取当前题目的上一题和下一题的主键id
+     */
+    private void assembleSubjectCursor(SubjectInfoBO boReq, SubjectInfoBO boResp) {
+        Long categoryId = boReq.getCategoryId();
+        Long labelId = boReq.getLabelId();
+        Long subjectId = boReq.getId();
+        if (Objects.isNull(categoryId) || Objects.isNull(labelId) || Objects.isNull(subjectId)) {
+            return;
+        }
+        Long nextSubjectId = subjectInfoService.querySubjectIdCursor(subjectId, categoryId, labelId, 1);
+        boResp.setNextSubjectId(nextSubjectId);
+        Long lastSubjectId = subjectInfoService.querySubjectIdCursor(subjectId, categoryId, labelId, 0);
+        boResp.setLastSubjectId(lastSubjectId);
     }
 
     private List<String> getLabelNameList(Long subjectId) {
