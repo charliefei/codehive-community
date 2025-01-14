@@ -16,15 +16,15 @@ import com.feirui.subject.infra.basic.service.impl.SubjectLabelServiceImpl;
 import com.feirui.subject.infra.basic.service.impl.SubjectMappingServiceImpl;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.MapUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.FutureTask;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.Collectors;
 
@@ -102,19 +102,21 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
         List<SubjectCategoryBO> categoryBOList = SubjectCategoryConverter.INSTANCE.convert(categoryList);
 
         // 查询每一个二级分类下的所有标签
-        // todo 后续使用completableFuture优化一下，参考mallchat
-        List<FutureTask<Map<Long, List<SubjectLabelBO>>>> futureTasks = new LinkedList<>();
         Map<Long, List<SubjectLabelBO>> map = new HashMap<>();
-        categoryBOList.forEach(categoryBO -> {
-            FutureTask<Map<Long, List<SubjectLabelBO>>> futureTask = new FutureTask<>(() -> getLabelBOMap(categoryBO));
-            futureTasks.add(futureTask);
-            labelThreadPool.submit(futureTask);
+        List<CompletableFuture<Map<Long, List<SubjectLabelBO>>>> completableFutureList = categoryBOList
+                .stream()
+                .map(category -> CompletableFuture.supplyAsync(() -> getLabelBOMap(category), labelThreadPool))
+                .collect(Collectors.toList());
+        completableFutureList.forEach(future -> {
+            try {
+                Map<Long, List<SubjectLabelBO>> resultMap = future.get();
+                if (!MapUtils.isEmpty(resultMap)) {
+                    map.putAll(resultMap);
+                }
+            } catch (Exception e) {
+                log.error("getSubjectCategoryBOS.completableFutureList.get().error: {}", e.getMessage(), e);
+            }
         });
-        for (FutureTask<Map<Long, List<SubjectLabelBO>>> futureTask : futureTasks) {
-            Map<Long, List<SubjectLabelBO>> resultMap = futureTask.get();
-            if (CollectionUtils.isEmpty(resultMap)) continue;
-            map.putAll(resultMap);
-        }
         categoryBOList.forEach(categoryBO -> {
             if (!CollectionUtils.isEmpty(map.get(categoryBO.getId()))) {
                 categoryBO.setLabelBOList(map.get(categoryBO.getId()));

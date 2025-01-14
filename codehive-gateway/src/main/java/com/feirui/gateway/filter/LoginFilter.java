@@ -26,7 +26,7 @@ public class LoginFilter implements GlobalFilter {
         String url = request.getURI().getPath();
         log.info("LoginFilter.filter.url:{}", url);
         // 请求登录接口，直接放行
-        if ("/auth/user/doLogin".equals(url)) {
+        if ("/user/doLogin".equals(url)) {
             return chain.filter(exchange);
         }
         // satoken解析token，得到loginId->对应用户表中的userName->微信扫码的openid
