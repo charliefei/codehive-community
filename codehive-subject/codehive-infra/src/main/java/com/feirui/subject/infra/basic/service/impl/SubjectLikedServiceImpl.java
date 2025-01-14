@@ -36,5 +36,10 @@ public class SubjectLikedServiceImpl extends ServiceImpl<SubjectLikedDao, Subjec
         return subjectLikedDao.queryPage(subjectLiked, start, pageSize);
     }
 
+    @Override
+    public void batchInsertOrUpdate(List<SubjectLiked> subjectLikedList) {
+        subjectLikedDao.batchInsertOrUpdate(subjectLikedList);
+    }
+
 }
 

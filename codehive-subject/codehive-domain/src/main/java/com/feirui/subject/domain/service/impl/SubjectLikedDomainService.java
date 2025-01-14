@@ -141,7 +141,7 @@ public class SubjectLikedDomainService {
             subjectLiked.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getStatus());
             subjectLikedList.add(subjectLiked);
         });
-        subjectLikedService.saveBatch(subjectLikedList);
+        subjectLikedService.batchInsertOrUpdate(subjectLikedList);
     }
 
     public PageResult<SubjectLikedBO> getSubjectLikedPage(SubjectLikedBO subjectLikedBO) {

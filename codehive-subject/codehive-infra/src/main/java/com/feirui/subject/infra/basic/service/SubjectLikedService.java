@@ -16,5 +16,7 @@ public interface SubjectLikedService extends IService<SubjectLiked> {
     Integer countByLikedUserId(String likedUserId);
 
     List<SubjectLiked> queryPage(SubjectLiked subjectLiked, int start, Integer pageSize);
+
+    void batchInsertOrUpdate(List<SubjectLiked> subjectLikedList);
 }
 
