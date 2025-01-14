@@ -1,6 +1,8 @@
 package com.feirui.subject.domain.bo;
 
+import com.feirui.subject.common.entity.PageInfo;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -11,8 +13,9 @@ import java.util.Date;
  * @author charliefei
  * @since 2025-01-10 00:37:45
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class SubjectLikedBO implements Serializable {
+public class SubjectLikedBO extends PageInfo implements Serializable {
 
     /**
      * 主键
@@ -23,6 +26,11 @@ public class SubjectLikedBO implements Serializable {
      * 题目id
      */
     private Long subjectId;
+
+    /**
+     * 题目名称
+     */
+    private String subjectName;
 
     /**
      * 点赞人id

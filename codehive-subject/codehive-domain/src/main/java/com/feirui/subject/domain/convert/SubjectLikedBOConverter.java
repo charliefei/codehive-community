@@ -5,11 +5,14 @@ import com.feirui.subject.infra.basic.entity.SubjectLiked;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper
 public interface SubjectLikedBOConverter {
 
     SubjectLikedBOConverter INSTANCE = Mappers.getMapper(SubjectLikedBOConverter.class);
 
-    SubjectLiked convertBOToEntity(SubjectLikedBO subjectLikedBO);
+    SubjectLiked convert(SubjectLikedBO subjectLikedBO);
 
+    List<SubjectLikedBO> convert(List<SubjectLiked> subjectLikedList);
 }

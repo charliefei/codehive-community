@@ -4,11 +4,13 @@ import com.alibaba.fastjson.JSON;
 import com.feirui.subject.application.convert.SubjectLikedDTOConverter;
 import com.feirui.subject.application.dto.SubjectLikedDTO;
 import com.feirui.subject.common.context.LoginContextHolder;
+import com.feirui.subject.common.entity.PageResult;
 import com.feirui.subject.common.entity.Result;
 import com.feirui.subject.domain.bo.SubjectLikedBO;
 import com.feirui.subject.domain.service.impl.SubjectLikedDomainService;
 import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,7 +42,7 @@ public class SubjectLikedController {
             String loginId = LoginContextHolder.getLoginId();
             subjectLikedDTO.setLikeUserId(loginId);
             Preconditions.checkNotNull(subjectLikedDTO.getLikeUserId(), "点赞人不能为空");
-            SubjectLikedBO SubjectLikedBO = SubjectLikedDTOConverter.INSTANCE.convertDTOToBO(subjectLikedDTO);
+            SubjectLikedBO SubjectLikedBO = SubjectLikedDTOConverter.INSTANCE.convert(subjectLikedDTO);
             subjectLikedDomainService.add(SubjectLikedBO);
             return Result.ok(true);
         } catch (Exception e) {
@@ -67,7 +69,7 @@ public class SubjectLikedController {
             Preconditions.checkNotNull(subjectLikedDTO.getUpdateBy(), "修改人不能为空");
             Preconditions.checkNotNull(subjectLikedDTO.getUpdateTime(), "修改时间不能为空");
             Preconditions.checkNotNull(subjectLikedDTO.getIsDeleted(), "不能为空");
-            SubjectLikedBO subjectLikedBO = SubjectLikedDTOConverter.INSTANCE.convertDTOToBO(subjectLikedDTO);
+            SubjectLikedBO subjectLikedBO = SubjectLikedDTOConverter.INSTANCE.convert(subjectLikedDTO);
             return Result.ok(subjectLikedDomainService.update(subjectLikedBO));
         } catch (Exception e) {
             log.error("SubjectLikedController.update.error:{}", e.getMessage(), e);
@@ -93,11 +95,32 @@ public class SubjectLikedController {
             Preconditions.checkNotNull(subjectLikedDTO.getUpdateBy(), "修改人不能为空");
             Preconditions.checkNotNull(subjectLikedDTO.getUpdateTime(), "修改时间不能为空");
             Preconditions.checkNotNull(subjectLikedDTO.getIsDeleted(), "不能为空");
-            SubjectLikedBO subjectLikedBO = SubjectLikedDTOConverter.INSTANCE.convertDTOToBO(subjectLikedDTO);
+            SubjectLikedBO subjectLikedBO = SubjectLikedDTOConverter.INSTANCE.convert(subjectLikedDTO);
             return Result.ok(subjectLikedDomainService.delete(subjectLikedBO));
         } catch (Exception e) {
             log.error("SubjectLikedController.delete.error:{}", e.getMessage(), e);
             return Result.fail("删除题目点赞表信息失败");
+        }
+    }
+
+    /**
+     * 查询我的点赞列表
+     */
+    @PostMapping("/getSubjectLikedPage")
+    public Result<PageResult<SubjectLikedDTO>> getSubjectLikedPage(@RequestBody SubjectLikedDTO subjectLikedDTO) {
+        try {
+            if (log.isInfoEnabled()) {
+                log.info("SubjectController.getSubjectLikedPage.dto:{}", JSON.toJSONString(subjectLikedDTO));
+            }
+            SubjectLikedBO subjectLikedBO = SubjectLikedDTOConverter.INSTANCE.convert(subjectLikedDTO);
+            subjectLikedBO.setPageNo(subjectLikedDTO.getPageNo());
+            subjectLikedBO.setPageSize(subjectLikedDTO.getPageSize());
+            PageResult<SubjectLikedBO> boPageResult = subjectLikedDomainService.getSubjectLikedPage(subjectLikedBO);
+            PageResult<SubjectLikedDTO> pageResult = SubjectLikedDTOConverter.INSTANCE.convert(boPageResult);
+            return Result.ok(pageResult);
+        } catch (Exception e) {
+            log.error("SubjectCategoryController.getSubjectLikedPage.error:{}", e.getMessage(), e);
+            return Result.fail("分页查询我的点赞失败");
         }
     }
 

@@ -1,6 +1,8 @@
 package com.feirui.subject.application.dto;
 
+import com.feirui.subject.common.entity.PageInfo;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -8,8 +10,9 @@ import java.util.Date;
 /**
  * 题目点赞表 dto
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class SubjectLikedDTO implements Serializable {
+public class SubjectLikedDTO extends PageInfo implements Serializable {
 
     /**
      * 主键
@@ -20,6 +23,11 @@ public class SubjectLikedDTO implements Serializable {
      * 题目id
      */
     private Long subjectId;
+
+    /**
+     * 题目名称
+     */
+    private String subjectName;
 
     /**
      * 点赞人id

@@ -40,5 +40,14 @@
         values(update_time) , is_deleted = values(is_deleted)
     </insert>
 
+    <select id="queryPage" resultType="com.feirui.subject.infra.basic.entity.SubjectLiked">
+        select *
+        from subject_liked
+        where like_user_id = #{entity.likeUserId}
+          and is_deleted = 0
+          and status = 1
+        limit #{start}, #{pageSize}
+    </select>
+
 </mapper>
 

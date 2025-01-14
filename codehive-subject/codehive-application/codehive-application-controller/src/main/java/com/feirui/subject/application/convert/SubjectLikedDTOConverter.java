@@ -1,6 +1,7 @@
 package com.feirui.subject.application.convert;
 
 import com.feirui.subject.application.dto.SubjectLikedDTO;
+import com.feirui.subject.common.entity.PageResult;
 import com.feirui.subject.domain.bo.SubjectLikedBO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -13,6 +14,7 @@ public interface SubjectLikedDTOConverter {
 
     SubjectLikedDTOConverter INSTANCE = Mappers.getMapper(SubjectLikedDTOConverter.class);
 
-    SubjectLikedBO convertDTOToBO(SubjectLikedDTO subjectLikedDTO);
+    SubjectLikedBO convert(SubjectLikedDTO subjectLikedDTO);
 
+    PageResult<SubjectLikedDTO> convert(PageResult<SubjectLikedBO> boPageResult);
 }
