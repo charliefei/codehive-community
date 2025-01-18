@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.feirui.practice.server.dao.PracticeSetDao">
+
+    <insert id="add">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO practice_set(set_name, set_type,primary_category_id, is_deleted, created_by, created_time)
+        values (
+        #{setName,jdbcType=VARCHAR},
+        #{setType,jdbcType=INTEGER},
+        #{primaryCategoryId,jdbcType=BIGINT},
+        #{isDeleted,jdbcType=INTEGER},
+        #{createdBy,jdbcType=VARCHAR},
+        #{createdTime,jdbcType=TIMESTAMP})
+    </insert>
+
+</mapper>
