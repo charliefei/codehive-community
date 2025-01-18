@@ -49,11 +49,11 @@ public class PracticeSetController {
      */
     @PostMapping(value = "/addPractice")
     public Result<PracticeSetVO> addPractice(@RequestBody GetPracticeSubjectListReq req) {
-        if (log.isInfoEnabled()) {
-            log.info("获取练习题入参{}", JSON.toJSONString(req));
-        }
         try {
-            //参数校验
+            if (log.isInfoEnabled()) {
+                log.info("获取练习题入参{}", JSON.toJSONString(req));
+            }
+            // 参数校验
             Preconditions.checkArgument(!Objects.isNull(req), "参数不能为空！");
             Preconditions.checkArgument(!CollectionUtils.isEmpty(req.getAssembleIds()), "标签ids不能为空！");
             PracticeSubjectDTO dto = new PracticeSubjectDTO();

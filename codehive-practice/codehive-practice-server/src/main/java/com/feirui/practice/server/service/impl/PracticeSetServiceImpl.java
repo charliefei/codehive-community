@@ -115,7 +115,10 @@ public class PracticeSetServiceImpl implements PracticeSetService {
             return setVO;
         }
         PracticeSetPO practiceSetPO = new PracticeSetPO();
+        // 实时生成的套卷
         practiceSetPO.setSetType(1);
+
+        // 生成套卷名称：拼接小类的名称
         List<String> assembleIds = dto.getAssembleIds();
         Set<Long> categoryIdSet = new HashSet<>();
         assembleIds.forEach(assembleId -> {
@@ -140,16 +143,17 @@ public class PracticeSetServiceImpl implements PracticeSetService {
             setName.append("等专项练习");
         }
         practiceSetPO.setSetName(setName.toString());
+
         String labelId = assembleIds.get(0).split("-")[1];
         SubjectLabelPO labelPO = subjectLabelDao.queryById(Long.valueOf(labelId));
         practiceSetPO.setPrimaryCategoryId(labelPO.getCategoryId());
         practiceSetPO.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
         practiceSetPO.setCreatedBy(LoginContextHolder.getLoginId());
         practiceSetPO.setCreatedTime(new Date());
+        // 持久化到练习套卷表，保存了套卷的基本信息
         practiceSetDao.add(practiceSetPO);
         Long practiceSetId = practiceSetPO.getId();
 
-        // 思考，这里哪里不符合规范，配合听视频的延伸
         practiceList.forEach(e -> {
             PracticeSetDetailPO detailPO = new PracticeSetDetailPO();
             detailPO.setSetId(practiceSetId);
@@ -158,6 +162,7 @@ public class PracticeSetServiceImpl implements PracticeSetService {
             detailPO.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
             detailPO.setCreatedBy(LoginContextHolder.getLoginId());
             detailPO.setCreatedTime(new Date());
+            // 持久化到练习套卷明细表，保存了套卷内的每一题，一对多
             practiceSetDetailDao.add(detailPO);
         });
         setVO.setSetId(practiceSetId);
