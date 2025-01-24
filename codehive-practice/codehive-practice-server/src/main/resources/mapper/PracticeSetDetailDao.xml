@@ -12,7 +12,7 @@
                 #{createdTime,jdbcType=TIMESTAMP})
     </insert>
 
-    <select id="selectBySetId" resultType="com.jingdianjichi.practice.server.entity.po.PracticeSetDetailPO">
+    <select id="selectBySetId" resultType="com.feirui.practice.server.entity.po.PracticeSetDetailPO">
         select subject_id as subjectId, subject_type as subjectType
         from practice_set_detail
         where is_deleted = 0

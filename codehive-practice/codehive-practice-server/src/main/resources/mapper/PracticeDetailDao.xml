@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.feirui.practice.server.dao.PracticeDetailDao">
+
+    <select id="selectCorrectCount" resultType="java.lang.Integer">
+        select count(1)
+        from practice_detail
+        where is_deleted = 0
+          and answer_status = 1
+          and practice_id = #{practiceId,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectByPracticeId"
+            resultType="com.feirui.practice.server.entity.po.PracticeDetailPO">
+        select subject_id as subjectId, subject_type as subjectType, answer_status as answerStatus
+        from practice_detail
+        where is_deleted = 0
+          and practice_id = #{practiceId,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insertSingle">
+        INSERT INTO practice_detail(practice_id, subject_id, subject_type, answer_status, answer_content,
+                                    is_deleted, created_by, created_time)
+        VALUES (#{practiceId},
+                #{subjectId},
+                #{subjectType},
+                #{answerStatus},
+                #{answerContent},
+                #{isDeleted},
+                #{createdBy},
+                #{createdTime})
+    </insert>
+
+    <select id="selectDetail"
+            resultType="com.feirui.practice.server.entity.po.PracticeDetailPO">
+        select id,
+               subject_id     as subjectId,
+               subject_type   as subjectType,
+               answer_status  as answerStatus,
+               answer_content as answerContent
+        from practice_detail
+        where is_deleted = 0
+          and practice_id = #{practiceId}
+          and subject_id = #{subjectId}
+          and created_by = #{loginId}
+    </select>
+
+</mapper>

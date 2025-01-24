@@ -17,4 +17,9 @@ public class PracticeSubjectDetailVO implements Serializable {
      */
     private Integer subjectType;
 
+    /**
+     * 是否回答
+     */
+    private Integer isAnswer;
+
 }

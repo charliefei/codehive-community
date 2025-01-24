@@ -18,4 +18,14 @@ public class PracticeSubjectListVO implements Serializable {
      */
     private List<PracticeSubjectDetailVO> subjectList;
 
+    /**
+     * 练习id
+     */
+    private Long practiceId;
+
+    /**
+     * 用时
+     */
+    private String timeUse;
+
 }

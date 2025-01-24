@@ -16,7 +16,7 @@
         #{createdTime,jdbcType=TIMESTAMP})
     </insert>
 
-    <select id="selectById" resultType="com.jingdianjichi.practice.server.entity.po.PracticeSetPO">
+    <select id="selectById" resultType="com.feirui.practice.server.entity.po.PracticeSetPO">
         select set_name            as setName,
                set_type            as setType,
                set_heat            as setHeat,
@@ -26,5 +26,11 @@
         where is_deleted = 0
           and id = #{setId,jdbcType=BIGINT}
     </select>
+
+    <update id="updateHeat">
+        update practice_set
+        set set_heat = set_heat + 1
+        where id = #{setId,jdbcType=BIGINT}
+    </update>
 
 </mapper>
