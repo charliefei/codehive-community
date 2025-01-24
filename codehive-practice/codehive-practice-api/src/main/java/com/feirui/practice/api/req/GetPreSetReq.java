@@ -9,7 +9,7 @@ import java.io.Serializable;
 public class GetPreSetReq implements Serializable {
 
     /**
-     * 排序类型 1默认 2最新 3最热
+     * 排序类型 0默认 1最新 2最热
      */
     private Integer orderType;
 

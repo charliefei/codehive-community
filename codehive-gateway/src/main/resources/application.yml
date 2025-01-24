@@ -44,6 +44,12 @@ spring:
             - Path=/subject/**
           filters:
             - StripPrefix=1
+        - id: practice
+          uri: lb://codehive-practice
+          predicates:
+            - Path=/practice/**
+          filters:
+            - StripPrefix=1
 sa-token:
   # token 名称（同时也是 cookie 名称）
   token-name: satoken
