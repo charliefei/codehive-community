@@ -27,6 +27,45 @@
           and id = #{setId,jdbcType=BIGINT}
     </select>
 
+    <select id="getListCount" resultType="java.lang.Integer">
+        select count(id)
+        from practice_set
+        where is_deleted = 0
+        and set_type = 2
+        <if test="setName != null">
+            and set_name like concat('%',#{setName,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="orderType != null and orderType == 0">
+            order by set_name desc
+        </if>
+        <if test="orderType != null and orderType == 1">
+            order by create_time desc
+        </if>
+        <if test="orderType != null and orderType == 2">
+            order by set_heat desc
+        </if>
+    </select>
+
+    <select id="getSetList" resultType="com.feirui.practice.server.entity.po.PracticeSetPO">
+        select id,set_name as setName,set_type as setType,set_heat as setHeat,set_desc as setDesc
+        from practice_set
+        where is_deleted = 0
+        and set_type = 2
+        <if test="dto.setName != null">
+            and set_name like concat('%',#{dto.setName,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="dto.orderType != null and dto.orderType == 0">
+            order by set_name desc
+        </if>
+        <if test="dto.orderType != null and dto.orderType == 1">
+            order by create_time desc
+        </if>
+        <if test="dto.orderType != null and dto.orderType == 2">
+            order by set_heat desc
+        </if>
+        limit #{limit}, #{offset}
+    </select>
+
     <update id="updateHeat">
         update practice_set
         set set_heat = set_heat + 1

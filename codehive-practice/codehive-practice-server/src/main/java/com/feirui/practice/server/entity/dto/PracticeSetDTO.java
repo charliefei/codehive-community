@@ -1,5 +1,6 @@
 package com.feirui.practice.server.entity.dto;
 
+import com.feirui.practice.api.common.PageInfo;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -37,5 +38,10 @@ public class PracticeSetDTO implements Serializable {
      * 套题名称
      */
     private String setName;
+
+    /**
+     * 分页信息
+     */
+    private PageInfo pageInfo;
 
 }

@@ -1,10 +1,12 @@
 package com.feirui.practice.server.service;
 
+import com.feirui.practice.api.common.PageResult;
 import com.feirui.practice.api.req.GetPracticeSubjectsReq;
 import com.feirui.practice.api.vo.PracticeSetVO;
 import com.feirui.practice.api.vo.PracticeSubjectListVO;
 import com.feirui.practice.api.vo.PracticeSubjectVO;
 import com.feirui.practice.api.vo.SpecialPracticeVO;
+import com.feirui.practice.server.entity.dto.PracticeSetDTO;
 import com.feirui.practice.server.entity.dto.PracticeSubjectDTO;
 
 import java.util.List;
@@ -30,4 +32,10 @@ public interface PracticeSetService {
      * 获取题目
      */
     PracticeSubjectVO getPracticeSubject(PracticeSubjectDTO dto);
+
+    /**
+     * 获取模拟套题内容
+     */
+    PageResult<PracticeSetVO> getPreSetContent(PracticeSetDTO dto);
+
 }
