@@ -1,9 +1,7 @@
 package com.feirui.practice.server.service;
 
-import com.feirui.practice.api.req.GetScoreDetailReq;
-import com.feirui.practice.api.req.GetSubjectDetailReq;
-import com.feirui.practice.api.req.SubmitPracticeDetailReq;
-import com.feirui.practice.api.req.SubmitSubjectDetailReq;
+import com.feirui.practice.api.req.*;
+import com.feirui.practice.api.vo.ReportVO;
 import com.feirui.practice.api.vo.ScoreDetailVO;
 import com.feirui.practice.api.vo.SubjectDetailVO;
 
@@ -30,5 +28,10 @@ public interface PracticeDetailService {
      * 获得答案详情
      */
     SubjectDetailVO getSubjectDetail(GetSubjectDetailReq req);
+
+    /**
+     * 答案解析-评估报告
+     */
+    ReportVO getReport(GetReportReq req);
 
 }
