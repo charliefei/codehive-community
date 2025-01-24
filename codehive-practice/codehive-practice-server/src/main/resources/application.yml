@@ -1,5 +1,5 @@
 server:
-  port: 3012
+  port: 3013
 spring:
   # redis配置
   redis:

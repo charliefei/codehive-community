@@ -3,6 +3,7 @@ package com.feirui.practice.server.service;
 import com.feirui.practice.api.req.GetPracticeSubjectsReq;
 import com.feirui.practice.api.vo.PracticeSetVO;
 import com.feirui.practice.api.vo.PracticeSubjectListVO;
+import com.feirui.practice.api.vo.PracticeSubjectVO;
 import com.feirui.practice.api.vo.SpecialPracticeVO;
 import com.feirui.practice.server.entity.dto.PracticeSubjectDTO;
 
@@ -25,4 +26,8 @@ public interface PracticeSetService {
      */
     PracticeSubjectListVO getSubjects(GetPracticeSubjectsReq req);
 
+    /**
+     * 获取题目
+     */
+    PracticeSubjectVO getPracticeSubject(PracticeSubjectDTO dto);
 }
