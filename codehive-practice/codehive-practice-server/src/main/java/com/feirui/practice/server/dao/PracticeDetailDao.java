@@ -29,4 +29,9 @@ public interface PracticeDetailDao {
                                   @Param("subjectId") Long subjectId,
                                   @Param("loginId") String loginId);
 
+    /**
+     * 更新练习详情
+     */
+    int update(PracticeDetailPO practiceDetailPO);
+
 }

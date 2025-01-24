@@ -2,6 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.feirui.practice.server.dao.PracticeDetailDao">
 
+    <update id="update">
+        update practice_detail
+        <set>
+            <if test="answerStatus != null">
+                answer_status = #{answerStatus},
+            </if>
+            <if test="answerContent != null">
+                answer_content = #{answerContent},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
     <select id="selectCorrectCount" resultType="java.lang.Integer">
         select count(1)
         from practice_detail
