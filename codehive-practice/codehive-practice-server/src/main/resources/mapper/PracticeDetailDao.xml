@@ -58,4 +58,12 @@
           and created_by = #{loginId}
     </select>
 
+    <select id="selectAnswer" resultType="com.feirui.practice.server.entity.po.PracticeDetailPO">
+        select answer_content as answerContent
+        from practice_detail
+        where is_deleted = 0
+          and practice_id = #{practiceId,jdbcType=BIGINT}
+          and subject_id = #{subjectId,jdbcType=BIGINT}
+    </select>
+
 </mapper>

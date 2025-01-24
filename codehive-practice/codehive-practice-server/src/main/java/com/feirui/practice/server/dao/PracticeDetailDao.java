@@ -34,4 +34,9 @@ public interface PracticeDetailDao {
      */
     int update(PracticeDetailPO practiceDetailPO);
 
+    /**
+     * 获取答案情况
+     */
+    PracticeDetailPO selectAnswer(@Param("practiceId") Long practiceId,@Param("subjectId") Long subjectId);
+
 }
