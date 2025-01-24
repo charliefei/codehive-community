@@ -3,7 +3,9 @@ package com.feirui.practice.server.controller;
 import com.alibaba.fastjson.JSON;
 import com.feirui.practice.api.common.Result;
 import com.feirui.practice.api.req.GetPracticeSubjectListReq;
+import com.feirui.practice.api.req.GetPracticeSubjectsReq;
 import com.feirui.practice.api.vo.PracticeSetVO;
+import com.feirui.practice.api.vo.PracticeSubjectListVO;
 import com.feirui.practice.api.vo.SpecialPracticeVO;
 import com.feirui.practice.server.entity.dto.PracticeSubjectDTO;
 import com.feirui.practice.server.service.PracticeSetService;
@@ -63,6 +65,31 @@ public class PracticeSetController {
                 log.info("获取练习题目列表出参{}", JSON.toJSONString(practiceSetVO));
             }
             return Result.ok(practiceSetVO);
+        } catch (IllegalArgumentException e) {
+            log.error("参数异常！错误原因{}", e.getMessage(), e);
+            return Result.fail(e.getMessage());
+        } catch (Exception e) {
+            log.error("获取练习题目列表异常！错误原因{}", e.getMessage(), e);
+            return Result.fail("获取练习题目列表异常！");
+        }
+    }
+
+    /**
+     * 获取练习题：套卷名称 + 套卷下面的题目列表(题目类型和题目id)
+     */
+    @PostMapping(value = "/getSubjects")
+    public Result<PracticeSubjectListVO> getSubjects(@RequestBody GetPracticeSubjectsReq req) {
+        if (log.isInfoEnabled()) {
+            log.info("获取练习题入参{}", JSON.toJSONString(req));
+        }
+        try {
+            Preconditions.checkArgument(!Objects.isNull(req), "参数不能为空！");
+            Preconditions.checkArgument(!Objects.isNull(req.getSetId()), "练习id不能为空！");
+            PracticeSubjectListVO list = practiceSetService.getSubjects(req);
+            if (log.isInfoEnabled()) {
+                log.info("获取练习题目列表出参{}", JSON.toJSONString(list));
+            }
+            return Result.ok(list);
         } catch (IllegalArgumentException e) {
             log.error("参数异常！错误原因{}", e.getMessage(), e);
             return Result.fail(e.getMessage());

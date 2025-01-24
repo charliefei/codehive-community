@@ -16,4 +16,15 @@
         #{createdTime,jdbcType=TIMESTAMP})
     </insert>
 
+    <select id="selectById" resultType="com.jingdianjichi.practice.server.entity.po.PracticeSetPO">
+        select set_name            as setName,
+               set_type            as setType,
+               set_heat            as setHeat,
+               set_desc            as setDesc,
+               primary_category_id as primaryCategoryId
+        from practice_set
+        where is_deleted = 0
+          and id = #{setId,jdbcType=BIGINT}
+    </select>
+
 </mapper>
