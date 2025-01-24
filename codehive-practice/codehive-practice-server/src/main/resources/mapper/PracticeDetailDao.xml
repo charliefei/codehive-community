@@ -15,6 +15,12 @@
         where id = #{id,jdbcType=BIGINT}
     </update>
 
+    <update id="deleteByPracticeId">
+        update practice_detail
+        set is_deleted = 1
+        where practice_id = #{practiceId}
+    </update>
+
     <select id="selectCorrectCount" resultType="java.lang.Integer">
         select count(1)
         from practice_detail

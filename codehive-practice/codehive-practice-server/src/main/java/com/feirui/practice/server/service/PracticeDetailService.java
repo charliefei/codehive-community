@@ -40,4 +40,9 @@ public interface PracticeDetailService {
      */
     List<RankVO> getPracticeRankList();
 
+    /**
+     * 放弃练习
+     */
+    Boolean giveUp(Long practiceId);
+
 }

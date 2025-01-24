@@ -11,10 +11,7 @@ import com.feirui.practice.server.service.PracticeDetailService;
 import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -171,6 +168,26 @@ public class PracticeDetailController {
         } catch (Exception e) {
             log.error("练习榜报错！错误原因{}", e.getMessage(), e);
             return Result.fail("练习榜异常！");
+        }
+    }
+
+    /**
+     * 放弃练习
+     */
+    @PostMapping(value = "/giveUp")
+    public Result<Boolean> giveUp(@RequestParam("practiceId") Long practiceId) {
+        try {
+            log.info("放弃练习入参{}", practiceId);
+            Preconditions.checkArgument(!Objects.isNull(practiceId), "练习id不能为空！");
+            Boolean result = practiceDetailService.giveUp(practiceId);
+            log.info("放弃练习出参{}", result);
+            return Result.ok(result);
+        } catch (IllegalArgumentException e) {
+            log.error("参数异常！错误原因{}", e.getMessage(), e);
+            return Result.fail(e.getMessage());
+        } catch (Exception e) {
+            log.error("放弃练习异常！错误原因{}", e.getMessage(), e);
+            return Result.fail("放弃练习异常！");
         }
     }
 
