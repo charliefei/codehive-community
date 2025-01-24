@@ -10,6 +10,25 @@
           and is_deleted = 0
     </select>
 
+    <select id="getUnCompleteCount" resultType="java.lang.Integer">
+        select count(1)
+        from practice_info
+        where created_by = #{loginId}
+          and complete_status = 0
+          and is_deleted = 0
+    </select>
+
+    <select id="getUnCompleteList"
+            resultType="com.feirui.practice.server.entity.po.PracticePO">
+        select id, set_id as setId, time_use as timeUse, submit_time as submitTime, correct_rate as correctRate
+        from practice_info
+        where created_by = #{loginId}
+          and is_deleted = 0
+          and complete_status = 0
+        order by submit_time desc
+        limit #{limit}, #{offset}
+    </select>
+
     <insert id="insert">
         <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
             SELECT LAST_INSERT_ID()
