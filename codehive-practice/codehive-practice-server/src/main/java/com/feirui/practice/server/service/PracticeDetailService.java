@@ -1,6 +1,7 @@
 package com.feirui.practice.server.service;
 
 import com.feirui.practice.api.req.*;
+import com.feirui.practice.api.vo.RankVO;
 import com.feirui.practice.api.vo.ReportVO;
 import com.feirui.practice.api.vo.ScoreDetailVO;
 import com.feirui.practice.api.vo.SubjectDetailVO;
@@ -33,5 +34,10 @@ public interface PracticeDetailService {
      * 答案解析-评估报告
      */
     ReportVO getReport(GetReportReq req);
+
+    /**
+     * 练习榜
+     */
+    List<RankVO> getPracticeRankList();
 
 }

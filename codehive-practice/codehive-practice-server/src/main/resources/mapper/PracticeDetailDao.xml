@@ -66,4 +66,14 @@
           and subject_id = #{subjectId,jdbcType=BIGINT}
     </select>
 
+    <select id="getPracticeCount" resultType="com.feirui.practice.server.entity.po.PracticeRankPO">
+        SELECT count(1)   AS count,
+               created_by AS createdBy
+        FROM practice_info
+        where is_deleted = 0
+        GROUP BY created_by
+        order by count desc
+        limit 5;
+    </select>
+
 </mapper>

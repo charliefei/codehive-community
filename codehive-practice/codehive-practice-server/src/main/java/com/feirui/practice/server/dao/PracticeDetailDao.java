@@ -1,6 +1,7 @@
 package com.feirui.practice.server.dao;
 
 import com.feirui.practice.server.entity.po.PracticeDetailPO;
+import com.feirui.practice.server.entity.po.PracticeRankPO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -38,5 +39,10 @@ public interface PracticeDetailDao {
      * 获取答案情况
      */
     PracticeDetailPO selectAnswer(@Param("practiceId") Long practiceId,@Param("subjectId") Long subjectId);
+
+    /**
+     * 获取排行榜情况
+     */
+    List<PracticeRankPO> getPracticeCount();
 
 }
