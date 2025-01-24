@@ -5,8 +5,10 @@ import com.alibaba.nacos.common.utils.CollectionUtils;
 import com.feirui.practice.api.enums.CompleteStatusEnum;
 import com.feirui.practice.api.enums.IsDeletedFlagEnum;
 import com.feirui.practice.api.enums.SubjectTypeEnum;
+import com.feirui.practice.api.req.GetScoreDetailReq;
 import com.feirui.practice.api.req.SubmitPracticeDetailReq;
 import com.feirui.practice.api.req.SubmitSubjectDetailReq;
+import com.feirui.practice.api.vo.ScoreDetailVO;
 import com.feirui.practice.server.dao.*;
 import com.feirui.practice.server.entity.dto.SubjectDTO;
 import com.feirui.practice.server.entity.dto.SubjectDetailDTO;
@@ -207,6 +209,24 @@ public class PracticeDetailServiceImpl implements PracticeDetailService {
         subjectDetailDTO.setSubjectParse(subjectPO.getSubjectParse());
         subjectDetailDTO.setSubjectName(subjectPO.getSubjectName());
         return subjectDetailDTO;
+    }
+
+    @Override
+    public List<ScoreDetailVO> getScoreDetail(GetScoreDetailReq req) {
+        Long practiceId = req.getPracticeId();
+        List<ScoreDetailVO> list = new LinkedList<>();
+        List<PracticeDetailPO> practiceDetailPOList = practiceDetailDao.selectByPracticeId(practiceId);
+        if (CollectionUtils.isEmpty(practiceDetailPOList)) {
+            return Collections.emptyList();
+        }
+        practiceDetailPOList.forEach(po -> {
+            ScoreDetailVO scoreDetailVO = new ScoreDetailVO();
+            scoreDetailVO.setSubjectId(po.getSubjectId());
+            scoreDetailVO.setSubjectType(po.getSubjectType());
+            scoreDetailVO.setIsCorrect(po.getAnswerStatus());
+            list.add(scoreDetailVO);
+        });
+        return list;
     }
 
 }

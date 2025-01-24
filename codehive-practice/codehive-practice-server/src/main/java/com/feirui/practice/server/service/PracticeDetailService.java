@@ -1,7 +1,11 @@
 package com.feirui.practice.server.service;
 
+import com.feirui.practice.api.req.GetScoreDetailReq;
 import com.feirui.practice.api.req.SubmitPracticeDetailReq;
 import com.feirui.practice.api.req.SubmitSubjectDetailReq;
+import com.feirui.practice.api.vo.ScoreDetailVO;
+
+import java.util.List;
 
 public interface PracticeDetailService {
 
@@ -14,5 +18,10 @@ public interface PracticeDetailService {
      * 提交练题情况
      */
     Boolean submit(SubmitPracticeDetailReq req);
+
+    /**
+     * 每题得分详情
+     */
+    List<ScoreDetailVO> getScoreDetail(GetScoreDetailReq req);
 
 }
