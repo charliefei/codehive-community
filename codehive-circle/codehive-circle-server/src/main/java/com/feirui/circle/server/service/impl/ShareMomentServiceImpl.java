@@ -64,7 +64,7 @@ public class ShareMomentServiceImpl extends ServiceImpl<ShareMomentMapper, Share
         LambdaQueryWrapper<ShareMoment> query = Wrappers.<ShareMoment>lambdaQuery()
                 .eq(Objects.nonNull(req.getCircleId()), ShareMoment::getCircleId, req.getCircleId())
                 .eq(ShareMoment::getIsDeleted, IsDeletedFlagEnum.UN_DELETED.getCode())
-                .orderByDesc(ShareMoment::getCircleId);
+                .orderByDesc(ShareMoment::getCreatedTime);
         PageInfo pageInfo = req.getPageInfo();
         Page<ShareMoment> page = new Page<>(pageInfo.getPageNo(), pageInfo.getPageSize());
         Page<ShareMoment> pageRes = super.page(page, query);

@@ -22,4 +22,9 @@ public class PracticeSubjectDetailVO implements Serializable {
      */
     private Integer isAnswer;
 
+    /**
+     * 答案内容
+     */
+    private String answerContent;
+
 }

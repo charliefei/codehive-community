@@ -257,6 +257,7 @@ public class PracticeSetServiceImpl implements PracticeSetService {
                 PracticeDetailPO practiceDetailPO = practiceDetailDao.selectDetail(practiceId, e.getSubjectId(), loginId);
                 if (Objects.nonNull(practiceDetailPO) && StringUtils.isNotBlank(practiceDetailPO.getAnswerContent())) {
                     practiceSubjectListVO.setIsAnswer(1);
+                    practiceSubjectListVO.setAnswerContent(practiceDetailPO.getAnswerContent());
                 } else {
                     practiceSubjectListVO.setIsAnswer(0);
                 }

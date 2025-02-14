@@ -42,6 +42,10 @@ public class ShareCommentReplyVO extends TreeNode implements Serializable {
 
     private String toId;
 
+    private String toName;
+
+    private String toAvatar;
+
     private Long parentId;
 
     private String userName;
