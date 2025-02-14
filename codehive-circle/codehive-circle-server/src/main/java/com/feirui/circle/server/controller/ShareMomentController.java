@@ -26,7 +26,7 @@ import java.util.Objects;
  */
 @Slf4j
 @RestController
-@RequestMapping("/share/moment")
+@RequestMapping("/circle/share/moment")
 public class ShareMomentController {
 
     @Resource

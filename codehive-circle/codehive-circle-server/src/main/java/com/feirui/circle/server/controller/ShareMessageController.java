@@ -18,7 +18,7 @@ import java.util.Objects;
  */
 @Slf4j
 @RestController
-@RequestMapping("/share/message")
+@RequestMapping("/circle/share/message")
 public class ShareMessageController {
 
     @Resource
