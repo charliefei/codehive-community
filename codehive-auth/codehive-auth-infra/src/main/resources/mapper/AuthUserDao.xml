@@ -2,4 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.feirui.auth.infra.basic.dao.AuthUserDao">
 
+    <select id="listUserInfoByIds" resultType="com.feirui.auth.infra.basic.entity.AuthUser">
+        select
+        id, user_name, nick_name, email, phone, password, sex, avatar, status, introduce, ext_json, created_by,
+        created_time, update_by, update_time, is_deleted
+        from auth_user
+        where user_name in
+        <foreach collection="userNameList" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
 </mapper>

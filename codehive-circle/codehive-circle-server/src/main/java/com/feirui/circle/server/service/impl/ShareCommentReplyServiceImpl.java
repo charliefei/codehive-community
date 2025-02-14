@@ -14,8 +14,10 @@ import com.feirui.circle.api.vo.ShareCommentReplyVO;
 import com.feirui.circle.server.config.context.LoginContextHolder;
 import com.feirui.circle.server.dao.ShareCommentReplyMapper;
 import com.feirui.circle.server.dao.ShareMomentMapper;
+import com.feirui.circle.server.entity.dto.UserInfo;
 import com.feirui.circle.server.entity.po.ShareCommentReply;
 import com.feirui.circle.server.entity.po.ShareMoment;
+import com.feirui.circle.server.rpc.UserRpc;
 import com.feirui.circle.server.service.ShareCommentReplyService;
 import com.feirui.circle.server.utils.TreeUtils;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,8 @@ public class ShareCommentReplyServiceImpl extends ServiceImpl<ShareCommentReplyM
 
     @Resource
     private ShareMomentMapper shareMomentMapper;
+    @Resource
+    private UserRpc userRpc;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -109,9 +113,13 @@ public class ShareCommentReplyServiceImpl extends ServiceImpl<ShareCommentReplyM
                         ShareCommentReply::getContent,
                         ShareCommentReply::getPicUrls,
                         ShareCommentReply::getCreatedBy,
+                        ShareCommentReply::getCreatedTime,
                         ShareCommentReply::getToUser,
                         ShareCommentReply::getParentId);
         List<ShareCommentReply> list = list(query);
+        List<String> userNameList = list.stream().map(ShareCommentReply::getCreatedBy).distinct().collect(Collectors.toList());
+        Map<String, UserInfo> userInfoMap = userRpc.batchGetUserInfo(userNameList);
+        UserInfo defaultUser = new UserInfo();
         List<ShareCommentReplyVO> voList = list.stream().map(item -> {
             ShareCommentReplyVO vo = new ShareCommentReplyVO();
             vo.setId(item.getId());
@@ -126,6 +134,10 @@ public class ShareCommentReplyServiceImpl extends ServiceImpl<ShareCommentReplyM
                 vo.setToId(item.getToUser());
             }
             vo.setParentId(item.getParentId());
+            UserInfo user = userInfoMap.getOrDefault(item.getCreatedBy(), defaultUser);
+            vo.setUserName(user.getNickName());
+            vo.setAvatar(user.getAvatar());
+            vo.setCreatedTime(item.getCreatedTime().getTime());
             return vo;
         }).collect(Collectors.toList());
         return TreeUtils.buildTree(voList);

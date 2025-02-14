@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -117,6 +118,14 @@ public class AuthUserDomainService {
         }
         AuthUser user = userList.get(0);
         return AuthUserBOConverter.INSTANCE.convert(user);
+    }
+
+    public List<AuthUserBO> listUserInfoByIds(List<String> userNameList) {
+        List<AuthUser> userList = authUserService.listUserInfoByIds(userNameList);
+        if (CollectionUtils.isEmpty(userList)) {
+            return Collections.emptyList();
+        }
+        return AuthUserBOConverter.INSTANCE.convert(userList);
     }
 
     @Transactional(rollbackFor = Exception.class)

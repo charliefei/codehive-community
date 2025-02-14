@@ -7,6 +7,7 @@ import com.feirui.auth.infra.basic.entity.AuthUser;
 import com.feirui.auth.infra.basic.service.AuthUserService;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -14,6 +15,9 @@ import java.util.List;
  */
 @Service("authUserService")
 public class AuthUserServiceImpl extends ServiceImpl<AuthUserDao, AuthUser> implements AuthUserService {
+
+    @Resource
+    private AuthUserDao authUserDao;
 
     @Override
     public List<AuthUser> queryByUsername(String userName) {
@@ -29,5 +33,11 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserDao, AuthUser> impl
                 .eq(AuthUser::getUserName, authUser.getUserName())
                 .update(authUser);
     }
+
+    @Override
+    public List<AuthUser> listUserInfoByIds(List<String> userNameList) {
+        return authUserDao.listUserInfoByIds(userNameList);
+    }
+
 }
 
