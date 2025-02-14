@@ -5,6 +5,9 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * 圈子信息
+ */
 @Data
 public class ShareCircleVO implements Serializable {
 
