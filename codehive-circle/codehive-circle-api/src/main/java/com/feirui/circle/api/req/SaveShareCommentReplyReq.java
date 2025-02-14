@@ -13,7 +13,7 @@ public class SaveShareCommentReplyReq implements Serializable {
     /**
      * 原始动态ID
      */
-    private Integer momentId;
+    private Long momentId;
 
     /**
      * 回复类型 1评论 2回复

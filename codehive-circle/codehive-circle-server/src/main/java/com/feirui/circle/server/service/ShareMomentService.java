@@ -19,4 +19,6 @@ public interface ShareMomentService extends IService<ShareMoment> {
 
     Boolean removeMoment(RemoveShareMomentReq req);
 
+    void incrReplyCount(Long id, int count);
+
 }

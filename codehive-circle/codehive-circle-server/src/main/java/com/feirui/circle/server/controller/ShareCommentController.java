@@ -3,8 +3,10 @@ package com.feirui.circle.server.controller;
 import com.alibaba.fastjson.JSON;
 import com.feirui.circle.api.common.Result;
 import com.feirui.circle.api.enums.IsDeletedFlagEnum;
+import com.feirui.circle.api.req.GetShareCommentReq;
 import com.feirui.circle.api.req.RemoveShareCommentReq;
 import com.feirui.circle.api.req.SaveShareCommentReplyReq;
+import com.feirui.circle.api.vo.ShareCommentReplyVO;
 import com.feirui.circle.server.entity.po.ShareMoment;
 import com.feirui.circle.server.service.ShareCommentReplyService;
 import com.feirui.circle.server.service.ShareMomentService;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -85,6 +88,31 @@ public class ShareCommentController {
         } catch (Exception e) {
             log.error("删除鸡圈评论内容异常！错误原因{}", e.getMessage(), e);
             return Result.fail("删除鸡圈评论内容异常！");
+        }
+    }
+
+    /**
+     * 查询该动态下的评论
+     */
+    @PostMapping(value = "/list")
+    public Result<List<ShareCommentReplyVO>> list(@RequestBody GetShareCommentReq req) {
+        try {
+            if (log.isInfoEnabled()) {
+                log.info("获取鸡圈评论内容入参{}", JSON.toJSONString(req));
+            }
+            Preconditions.checkArgument(Objects.nonNull(req), "参数不能为空！");
+            Preconditions.checkArgument(Objects.nonNull(req.getId()), "内容ID不能为空！");
+            List<ShareCommentReplyVO> result = shareCommentReplyService.listComment(req);
+            if (log.isInfoEnabled()) {
+                log.info("获取鸡圈评论内容{}", JSON.toJSONString(result));
+            }
+            return Result.ok(result);
+        } catch (IllegalArgumentException e) {
+            log.error("参数异常！错误原因{}", e.getMessage(), e);
+            return Result.fail(e.getMessage());
+        } catch (Exception e) {
+            log.error("获取鸡圈评论内容异常！错误原因{}", e.getMessage(), e);
+            return Result.fail("获取鸡圈评论内容异常！");
         }
     }
 
