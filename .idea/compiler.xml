@@ -32,6 +32,7 @@
         <module name="codehive-infra" />
         <module name="codehive-application-job" />
         <module name="codehive-auth-starter" />
+        <module name="codehive-circle-api" />
         <module name="codehive-application-controller" />
         <module name="codehive-auth-domain" />
         <module name="codehive-oss" />
@@ -48,6 +49,7 @@
         <module name="codehive-gateway" />
         <module name="codehive-auth-application-job" />
         <module name="codehive-practice-server" />
+        <module name="codehive-circle-server" />
         <module name="codehive-auth-application-controller" />
         <module name="codehive-auth-infra" />
       </profile>
