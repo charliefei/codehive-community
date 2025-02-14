@@ -8,6 +8,7 @@ import com.feirui.circle.api.req.RemoveShareCommentReq;
 import com.feirui.circle.api.req.SaveShareCommentReplyReq;
 import com.feirui.circle.api.vo.ShareCommentReplyVO;
 import com.feirui.circle.server.entity.po.ShareMoment;
+import com.feirui.circle.server.sensitive.WordFilter;
 import com.feirui.circle.server.service.ShareCommentReplyService;
 import com.feirui.circle.server.service.ShareMomentService;
 import com.google.common.base.Preconditions;
@@ -33,6 +34,8 @@ public class ShareCommentController {
     private ShareMomentService shareMomentService;
     @Resource
     private ShareCommentReplyService shareCommentReplyService;
+    @Resource
+    private WordFilter wordFilter;
 
     /**
      * 发布内容
@@ -50,6 +53,7 @@ public class ShareCommentController {
             ShareMoment moment = shareMomentService.getById(req.getMomentId());
             Preconditions.checkArgument((Objects.nonNull(moment) && moment.getIsDeleted() != IsDeletedFlagEnum.DELETED.getCode()), "非法内容！");
             Preconditions.checkArgument((Objects.nonNull(req.getContent()) || Objects.nonNull(req.getPicUrlList())), "内容不能为空！");
+            wordFilter.check(req.getContent());
             Boolean result = shareCommentReplyService.saveComment(req);
             if (log.isInfoEnabled()) {
                 log.info("发布内容{}", JSON.toJSONString(result));
@@ -63,7 +67,6 @@ public class ShareCommentController {
             return Result.fail("发布内容异常！");
         }
     }
-
 
     /**
      * 删除鸡圈评论内容

@@ -8,6 +8,7 @@ import com.feirui.circle.api.req.RemoveShareMomentReq;
 import com.feirui.circle.api.req.SaveMomentCircleReq;
 import com.feirui.circle.api.vo.ShareMomentVO;
 import com.feirui.circle.server.entity.po.ShareCircle;
+import com.feirui.circle.server.sensitive.WordFilter;
 import com.feirui.circle.server.service.ShareCircleService;
 import com.feirui.circle.server.service.ShareMomentService;
 import com.google.common.base.Preconditions;
@@ -32,6 +33,8 @@ public class ShareMomentController {
     private ShareMomentService shareMomentService;
     @Resource
     private ShareCircleService shareCircleService;
+    @Resource
+    private WordFilter wordFilter;
 
     /**
      * 发布内容
@@ -46,7 +49,8 @@ public class ShareMomentController {
             Preconditions.checkArgument(Objects.nonNull(req.getCircleId()), "圈子ID不能为空！");
             ShareCircle data = shareCircleService.getById(req.getCircleId());
             Preconditions.checkArgument((Objects.nonNull(data) && data.getParentId() != -1), "非法圈子ID！");
-            Preconditions.checkArgument((Objects.nonNull(req.getContent())), "鸡圈不能为空！");
+            Preconditions.checkArgument((Objects.nonNull(req.getContent()) || Objects.nonNull(req.getPicUrlList())), "鸡圈不能为空！");
+            wordFilter.check(req.getContent());
             Boolean result = shareMomentService.saveMoment(req);
             if (log.isInfoEnabled()) {
                 log.info("发布内容{}", JSON.toJSONString(result));
@@ -60,7 +64,6 @@ public class ShareMomentController {
             return Result.fail("发布内容异常！");
         }
     }
-
 
     /**
      * 分页查询鸡圈内容
@@ -85,7 +88,6 @@ public class ShareMomentController {
             return Result.fail("鸡圈内容异常！");
         }
     }
-
 
     /**
      * 删除鸡圈内容
