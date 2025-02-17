@@ -1,5 +1,6 @@
 package com.feirui.subject.infra.basic.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -40,6 +41,7 @@ public class SubjectInfo implements Serializable {
 
     private Integer isDeleted;
 
+    @TableField(exist = false)
     private Integer subjectCount;
 }
 

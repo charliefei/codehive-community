@@ -1,10 +1,11 @@
 package com.feirui.auth.infra.basic.entity;
 
 import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.io.Serializable;
 
 /**
  * (AuthPermission)表实体类
@@ -26,7 +27,8 @@ public class AuthPermission {
     private String menuUrl;
     
     private Integer status;
-    
+
+    @TableField(value = "`show`")
     private Integer show;
     
     private String icon;
