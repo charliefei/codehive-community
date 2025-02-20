@@ -1,23 +1,22 @@
 package com.feirui.interview.server.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.feirui.interview.api.common.PageResult;
 import com.feirui.interview.api.common.Result;
+import com.feirui.interview.api.req.InterviewHistoryReq;
 import com.feirui.interview.api.req.InterviewReq;
 import com.feirui.interview.api.req.InterviewSubmitReq;
 import com.feirui.interview.api.req.StartReq;
-import com.feirui.interview.api.vo.InterviewQuestionVO;
-import com.feirui.interview.api.vo.InterviewResultVO;
-import com.feirui.interview.api.vo.InterviewVO;
+import com.feirui.interview.api.vo.*;
 import com.feirui.interview.server.service.InterviewHistoryService;
+import com.feirui.interview.server.service.InterviewQuestionHistoryService;
 import com.feirui.interview.server.service.InterviewService;
 import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -32,6 +31,8 @@ public class InterviewController {
     private InterviewService interviewService;
     @Resource
     private InterviewHistoryService interviewHistoryService;
+    @Resource
+    private InterviewQuestionHistoryService interviewQuestionHistoryService;
 
     /**
      * 分析简历
@@ -96,6 +97,54 @@ public class InterviewController {
         } catch (Exception e) {
             log.error("分析简历异常！错误原因{}", e.getMessage(), e);
             return Result.fail("分析简历异常！");
+        }
+    }
+
+    /**
+     * 分页查询面试记录
+     */
+    @PostMapping(value = "/getHistory")
+    public Result<PageResult<InterviewHistoryVO>> getHistory(@RequestBody InterviewHistoryReq req) {
+        try {
+            if (log.isInfoEnabled()) {
+                log.info("分页查询面试记录入参{}", JSON.toJSONString(req));
+            }
+            Preconditions.checkArgument(!Objects.isNull(req), "参数不能为空！");
+            PageResult<InterviewHistoryVO> result = interviewHistoryService.getHistory(req);
+            if (log.isInfoEnabled()) {
+                log.info("分页查询面试记录出参{}", JSON.toJSONString(result));
+            }
+            return Result.ok(result);
+        } catch (IllegalArgumentException e) {
+            log.error("参数异常！错误原因{}", e.getMessage(), e);
+            return Result.fail(e.getMessage());
+        } catch (Exception e) {
+            log.error("分页查询面试记录异常！错误原因{}", e.getMessage(), e);
+            return Result.fail("分页查询面试记录异常！");
+        }
+    }
+
+    /**
+     * 查询详情
+     */
+    @GetMapping(value = "/detail")
+    public Result<List<InterviewQuestionHistoryVO>> detail(Long id) {
+        try {
+            if (log.isInfoEnabled()) {
+                log.info("查询详情入参{}", id);
+            }
+            Preconditions.checkArgument(!Objects.isNull(id), "参数不能为空！");
+            List<InterviewQuestionHistoryVO> result = interviewQuestionHistoryService.detail(id);
+            if (log.isInfoEnabled()) {
+                log.info("查询详情出参{}", JSON.toJSONString(result));
+            }
+            return Result.ok(result);
+        } catch (IllegalArgumentException e) {
+            log.error("参数异常！错误原因{}", e.getMessage(), e);
+            return Result.fail(e.getMessage());
+        } catch (Exception e) {
+            log.error("查询详情异常！错误原因{}", e.getMessage(), e);
+            return Result.fail("查询详情异常！");
         }
     }
 

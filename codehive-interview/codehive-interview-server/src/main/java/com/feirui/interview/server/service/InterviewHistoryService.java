@@ -1,7 +1,10 @@
 package com.feirui.interview.server.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.feirui.interview.api.common.PageResult;
+import com.feirui.interview.api.req.InterviewHistoryReq;
 import com.feirui.interview.api.req.InterviewSubmitReq;
+import com.feirui.interview.api.vo.InterviewHistoryVO;
 import com.feirui.interview.api.vo.InterviewResultVO;
 import com.feirui.interview.server.entity.po.InterviewHistory;
 
@@ -11,5 +14,7 @@ import com.feirui.interview.server.entity.po.InterviewHistory;
 public interface InterviewHistoryService extends IService<InterviewHistory> {
 
     void logInterview(InterviewSubmitReq req, InterviewResultVO submit);
+
+    PageResult<InterviewHistoryVO> getHistory(InterviewHistoryReq req);
 
 }
