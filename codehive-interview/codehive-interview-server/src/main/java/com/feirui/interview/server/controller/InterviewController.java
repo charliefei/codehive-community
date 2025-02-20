@@ -3,9 +3,12 @@ package com.feirui.interview.server.controller;
 import com.alibaba.fastjson.JSON;
 import com.feirui.interview.api.common.Result;
 import com.feirui.interview.api.req.InterviewReq;
+import com.feirui.interview.api.req.InterviewSubmitReq;
 import com.feirui.interview.api.req.StartReq;
 import com.feirui.interview.api.vo.InterviewQuestionVO;
+import com.feirui.interview.api.vo.InterviewResultVO;
 import com.feirui.interview.api.vo.InterviewVO;
+import com.feirui.interview.server.service.InterviewHistoryService;
 import com.feirui.interview.server.service.InterviewService;
 import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +30,8 @@ public class InterviewController {
 
     @Resource
     private InterviewService interviewService;
+    @Resource
+    private InterviewHistoryService interviewHistoryService;
 
     /**
      * 分析简历
@@ -69,6 +74,28 @@ public class InterviewController {
         } catch (Exception e) {
             log.error("开始面试异常！错误原因{}", e.getMessage(), e);
             return Result.fail("开始面试异常！");
+        }
+    }
+
+    /**
+     * 面试提交答案
+     */
+    @PostMapping(value = "/submit")
+    public Result<InterviewResultVO> submit(@RequestBody InterviewSubmitReq req) {
+        try {
+            if (log.isInfoEnabled()) {
+                log.info("面试提交入参{}", JSON.toJSON(req));
+            }
+            Preconditions.checkArgument(!Objects.isNull(req), "参数不能为空！");
+            InterviewResultVO submit = interviewService.submit(req);
+            interviewHistoryService.logInterview(req, submit);
+            return Result.ok(submit);
+        } catch (IllegalArgumentException e) {
+            log.error("参数异常！错误原因{}", e.getMessage(), e);
+            return Result.fail(e.getMessage());
+        } catch (Exception e) {
+            log.error("分析简历异常！错误原因{}", e.getMessage(), e);
+            return Result.fail("分析简历异常！");
         }
     }
 
