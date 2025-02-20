@@ -9,5 +9,6 @@ import lombok.Getter;
 public enum EngineEnum {
 
     JI_CHI,
+    ALI_BL,
 
 }

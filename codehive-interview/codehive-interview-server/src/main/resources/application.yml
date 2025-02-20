@@ -48,3 +48,6 @@ spring:
           enabled: true
         config:
           enabled: true
+  mvc:
+    async:
+      request-timeout: 600000
