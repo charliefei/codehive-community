@@ -1,6 +1,8 @@
 package com.feirui.interview.server.service.impl;
 
 import com.feirui.interview.api.req.InterviewReq;
+import com.feirui.interview.api.req.StartReq;
+import com.feirui.interview.api.vo.InterviewQuestionVO;
 import com.feirui.interview.api.vo.InterviewVO;
 import com.feirui.interview.server.dao.SubjectDao;
 import com.feirui.interview.server.entity.po.SubjectLabel;
@@ -41,6 +43,13 @@ public class InterviewServiceImpl implements InterviewService, ApplicationContex
         InterviewEngine engine = engineMap.get(req.getEngine());
         Preconditions.checkArgument(!Objects.isNull(engine), "引擎不能为空！");
         return engine.analyse(keyWords);
+    }
+
+    @Override
+    public InterviewQuestionVO start(StartReq req) {
+        InterviewEngine engine = engineMap.get(req.getEngine());
+        Preconditions.checkArgument(!Objects.isNull(engine), "引擎不能为空！");
+        return engine.start(req);
     }
 
     private List<String> buildKeyWords(String url) {
