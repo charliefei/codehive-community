@@ -15,13 +15,16 @@ import com.feirui.circle.api.req.RemoveShareMomentReq;
 import com.feirui.circle.api.req.SaveMomentCircleReq;
 import com.feirui.circle.api.vo.ShareMomentVO;
 import com.feirui.circle.server.config.context.LoginContextHolder;
+import com.feirui.circle.server.dao.ShareCircleMapper;
 import com.feirui.circle.server.dao.ShareCommentReplyMapper;
 import com.feirui.circle.server.dao.ShareMomentMapper;
 import com.feirui.circle.server.entity.dto.UserInfo;
+import com.feirui.circle.server.entity.po.ShareCircle;
 import com.feirui.circle.server.entity.po.ShareCommentReply;
 import com.feirui.circle.server.entity.po.ShareMoment;
 import com.feirui.circle.server.rpc.UserRpc;
 import com.feirui.circle.server.service.ShareMomentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -43,6 +46,8 @@ public class ShareMomentServiceImpl extends ServiceImpl<ShareMomentMapper, Share
     private ShareCommentReplyMapper shareCommentReplyMapper;
     @Resource
     private UserRpc userRpc;
+    @Resource
+    private ShareCircleMapper shareCircleMapper;
 
     @Override
     public Boolean saveMoment(SaveMomentCircleReq req) {
@@ -77,6 +82,9 @@ public class ShareMomentServiceImpl extends ServiceImpl<ShareMomentMapper, Share
             ShareMomentVO vo = new ShareMomentVO();
             vo.setId(item.getId());
             vo.setCircleId(item.getCircleId());
+            ShareCircle shareCircle = shareCircleMapper.selectById(item.getCircleId());
+            vo.setCircleName(shareCircle.getCircleName());
+            vo.setCircleIcon(shareCircle.getIcon());
             vo.setContent(item.getContent());
             if (Objects.nonNull(item.getPicUrls())) {
                 List<String> picList = JSONArray.parseArray(item.getPicUrls(), String.class);

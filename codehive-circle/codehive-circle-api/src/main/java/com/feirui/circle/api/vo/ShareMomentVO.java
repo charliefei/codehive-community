@@ -23,6 +23,10 @@ public class ShareMomentVO implements Serializable {
      */
     private Long circleId;
 
+    private String circleName;
+
+    private String circleIcon;
+
     /**
      * 动态内容
      */

@@ -143,7 +143,7 @@
         select count(distinct subject_id)
         from subject_mapping a,
              subject_label b
-        where a.label_id = b.id and b.category_id = #{id}
+        where a.label_id = b.id and b.category_id = #{categoryId}
     </select>
 
     <!--新增所有列-->
