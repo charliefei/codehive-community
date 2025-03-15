@@ -17,18 +17,18 @@ public class EvaluateUtils {
         list.add(new Evaluate(0, 3, "%s掌握较差,要加把劲"));
         list.add(new Evaluate(0, 3, "%s掌握不大行,还要努努力"));
         list.add(new Evaluate(0, 3, "%s掌握有点差,要加把劲"));
-        list.add(new Evaluate(0, 3, "%s掌握还是比较弱,多跟鸡哥学学"));
-        list.add(new Evaluate(0, 3, "%s掌握有点离谱,多想群友讨教讨教"));
+        list.add(new Evaluate(0, 3, "%s掌握较弱"));
+        list.add(new Evaluate(0, 3, "%s掌握的有点离谱,要多多练习"));
 
         list.add(new Evaluate(3, 4, "%s掌握还ok,努力再上一层楼"));
-        list.add(new Evaluate(3, 4, "%s掌握还不错,带飞下群友吧"));
-        list.add(new Evaluate(3, 4, "%s掌握好挺好的,分享下学习心得呗"));
+        list.add(new Evaluate(3, 4, "%s掌握还不错"));
+        list.add(new Evaluate(3, 4, "%s掌握较好"));
         list.add(new Evaluate(3, 4, "%s掌握的不赖,不能太飘"));
 
         list.add(new Evaluate(4, Integer.MAX_VALUE, "%s掌握的很好,以后就看你的了"));
         list.add(new Evaluate(4, Integer.MAX_VALUE, "%s掌握的很6,是个天才"));
         list.add(new Evaluate(4, Integer.MAX_VALUE, "%s掌握太熟了,未来可期"));
-        list.add(new Evaluate(4, Integer.MAX_VALUE, "%s掌握太猛,不愧是顶级程序"));
+        list.add(new Evaluate(4, Integer.MAX_VALUE, "%s掌握太猛,不愧是顶级程序员"));
         return list;
     }
 

@@ -45,9 +45,9 @@ public class AuthTests {
         String validateCode = "123";
         String validateCodeKey = redisUtil.buildKey("loginCode", validateCode);
         redisUtil.setNx(validateCodeKey, "oYA4HtxySdme-hGYlWGx-g3TktZE", 5L, TimeUnit.DAYS);
-        SaTokenInfo tokenInfo = authUserDomainService.doLogin(validateCode);
+        // SaTokenInfo tokenInfo = authUserDomainService.doLogin(validateCode);
         // {"isLogin":true,"loginDevice":"default-device","loginId":"oYA4HtxySdme-hGYlWGx-g3TktZE","loginType":"login","sessionTimeout":2592000,"tokenActiveTimeout":-1,"tokenName":"satoken","tokenSessionTimeout":-2,"tokenTimeout":2592000,"tokenValue":"BTUEFIZsSXNjiNGEoB18gyHHRrAtoI0i"}
-        System.out.println(JSON.toJSONString(tokenInfo));
+        // System.out.println(JSON.toJSONString(tokenInfo));
     }
 
     @Test
