@@ -1,4 +1,4 @@
-package com.feirui.ai;
+package com.feirui.ai.domain;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package com.feirui.ai;
+package com.feirui.ai.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

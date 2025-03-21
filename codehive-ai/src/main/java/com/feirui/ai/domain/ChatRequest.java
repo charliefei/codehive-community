@@ -1,4 +1,4 @@
-package com.feirui.ai;
+package com.feirui.ai.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,10 +12,12 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChatRequest {
+
     private String model;
     private List<Message> messages;
     private Double temperature;
     private Integer max_tokens;
+    private boolean stream;
 
     @Data
     @NoArgsConstructor
@@ -24,5 +26,6 @@ public class ChatRequest {
         private String role;
         private String content;
     }
+
 }
 
