@@ -1,11 +1,9 @@
-package com.feirui.circle.server;
+package com.feirui.ai;
 
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.http.Method;
 import cn.hutool.json.JSONUtil;
-import com.feirui.circle.server.ai.ChatRequest;
-import com.feirui.circle.server.ai.ChatResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
@@ -31,7 +29,7 @@ public class AiChatTest {
             HttpResponse execute = HttpUtil.createRequest(Method.POST, "https://api.deepseek.com/chat/completions")
                     .body(JSONUtil.toJsonStr(request))
                     .header("Content-Type", "application/json")
-                    .header("Authorization", "Bearer sk-1e0b0e720dd04896aceb7c6e9d21b3f1")
+                    .header("Authorization", "Bearer sk-xxx")
                     .header("Accept", "application/json")
                     .execute();
 

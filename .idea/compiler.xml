@@ -24,6 +24,7 @@
       <directory url="file://$PROJECT_DIR$/codehive-practice/src/main/resources/archetype-resources" includeSubdirectories="true" />
       <directory url="file://$PROJECT_DIR$/codehive-interview/src/main/resources/archetype-resources" includeSubdirectories="true" />
       <directory url="file://$PROJECT_DIR$/codehive-interview/codehive-interview-api/src/main/resources/archetype-resources" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/codehive-ai/src/main/resources/archetype-resources" includeSubdirectories="true" />
     </excludeFromCompile>
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
@@ -43,6 +44,7 @@
         <module name="codehive-auth-infra" />
         <module name="codehive-infra" />
         <module name="codehive-application-controller" />
+        <module name="codehive-ai" />
         <module name="codehive-auth-domain" />
         <module name="codehive-oss" />
         <module name="codehive-domain" />

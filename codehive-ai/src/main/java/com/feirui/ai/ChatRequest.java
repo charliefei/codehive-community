@@ -1,4 +1,4 @@
-package com.feirui.circle.server.ai;
+package com.feirui.ai;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

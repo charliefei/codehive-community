@@ -1,4 +1,4 @@
-package com.feirui.circle.server.ai;
+package com.feirui.ai;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -13,4 +13,12 @@ public class DeepSeekConfig {
     private String model;
     private Double temperature;
     private Integer maxTokens;
+
+    {
+        apiKey = "";
+        apiUrl = "https://api.deepseek.com/chat/completions";
+        model = "deepseek-chat";
+        temperature = 0.5;
+        maxTokens = 1000;
+    }
 }
