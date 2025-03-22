@@ -1,5 +1,6 @@
 package com.feirui.ai;
 
+import cn.hutool.http.HtmlUtil;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.http.Method;
@@ -92,6 +93,11 @@ public class AiChatTest {
         authorization.subscribe(res -> log.info("最终响应：{}", res));
 
         System.in.read();
+    }
+
+    @Test
+    public void contextLoads() {
+        System.out.println(HtmlUtil.cleanHtmlTag("<p>段落</p><hr/><div class='test'>测试文本</div><p>段落</p>"));
     }
 
 }
