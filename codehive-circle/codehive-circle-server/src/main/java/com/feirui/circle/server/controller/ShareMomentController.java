@@ -1,8 +1,11 @@
 package com.feirui.circle.server.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.feirui.ai.domain.ChatRequest;
+import com.feirui.ai.service.DeepSeekService;
 import com.feirui.circle.api.common.PageResult;
 import com.feirui.circle.api.common.Result;
+import com.feirui.circle.api.req.GetAiMomentSummaryReq;
 import com.feirui.circle.api.req.GetShareMomentReq;
 import com.feirui.circle.api.req.RemoveShareMomentReq;
 import com.feirui.circle.api.req.SaveMomentCircleReq;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -29,10 +33,14 @@ import java.util.Objects;
 @RequestMapping("/circle/share/moment")
 public class ShareMomentController {
 
+    private static final String preset_context = "接下来我给你输入一篇文章，我帮我总结这篇文章，并提炼要点";
+
     @Resource
     private ShareMomentService shareMomentService;
     @Resource
     private ShareCircleService shareCircleService;
+    @Resource
+    private DeepSeekService deepSeekService;
     @Resource
     private WordFilter wordFilter;
 
@@ -112,6 +120,18 @@ public class ShareMomentController {
             log.error("删除鸡圈内容异常！错误原因{}", e.getMessage(), e);
             return Result.fail("删除鸡圈内容异常！");
         }
+    }
+
+    @PostMapping("/ai/summary")
+    public String aiSummary(@RequestBody GetAiMomentSummaryReq req) {
+        ChatRequest request = ChatRequest.builder()
+                .model("deepseek-chat")
+                .messages(Arrays.asList(
+                        new ChatRequest.Message("system", preset_context),
+                        new ChatRequest.Message("user", req.getQuery())
+                ))
+                .build();
+        return deepSeekService.generateResponse(request);
     }
 
 }
