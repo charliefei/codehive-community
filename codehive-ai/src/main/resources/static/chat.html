@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
+</head>
+<body>
+<div>
+    <input type="text" id="msgInp"/>
+    <button id="msgBtn">Send</button>
+</div>
+<hr>
+<div id="content"></div>
+<script>
+    const msgInp = document.querySelector("#msgInp");
+    const msgBtn = document.querySelector("#msgBtn")
+    const content = document.querySelector("#content");
+    msgBtn.addEventListener("click", () => {
+        let eventSource = new EventSource(
+            `http://localhost:3015/ai/chat/stream?query=${encodeURIComponent(msgInp.value)}`
+        );
+        eventSource.onopen = () => {
+            console.log("onopen 连接成功");
+        };
+        eventSource.onerror = (e) => {
+            console.log("onerror 连接断开", e);
+            eventSource.close();
+        };
+        eventSource.onmessage = (e) => {
+            console.log("收到消息: ", e);
+            content.innerHTML += e.data;
+        };
+    })
+</script>
+</body>
+</html>

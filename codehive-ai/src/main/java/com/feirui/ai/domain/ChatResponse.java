@@ -2,10 +2,11 @@ package com.feirui.ai.domain;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class ChatResponse {
+public class ChatResponse implements Serializable {
 
     private String id;
 
@@ -26,6 +27,14 @@ public class ChatResponse {
 
         private Integer index;
 
+        /**
+         * 流式
+         */
+        private Delta delta;
+
+        /**
+         * 非流式
+         */
         private Message message;
 
         private String logprobs;
@@ -35,6 +44,11 @@ public class ChatResponse {
         @Data
         public static class Message {
             private String role;
+            private String content;
+        }
+
+        @Data
+        public static class Delta {
             private String content;
         }
     }

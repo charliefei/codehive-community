@@ -82,10 +82,10 @@ public class DeepSeekService {
         } else {
             try {
                 ChatResponse response = JSONUtil.toBean(result, ChatResponse.class);
-                String content = response.getChoices().get(0).getMessage().getContent();
+                String content = response.getChoices().get(0).getDelta().getContent();
                 return Flux.just(content);
             } catch (Exception e) {
-                log.error("解析失败: {}", result);
+                log.error("解析失败: {}", result, e);
             }
         }
         return Flux.empty();
