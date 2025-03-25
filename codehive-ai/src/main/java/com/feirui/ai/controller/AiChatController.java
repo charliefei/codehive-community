@@ -25,12 +25,23 @@ public class AiChatController {
 
     @GetMapping(value = "/chat/stream", produces = TEXT_EVENT_STREAM_VALUE)
     public Flux<String> chat(String query) {
+        log.info("query: {}", query);
         ChatRequest question = ChatRequest.builder()
                 .model("deepseek-chat")
                 .messages(Collections.singletonList(new ChatRequest.Message("user", query)))
                 .stream(true)
                 .build();
         return deepSeekService.generateResponseAsStream(question);
+    }
+
+    @GetMapping(value = "/chat")
+    public String chatAsText(String query) {
+        log.info("query: {}", query);
+        ChatRequest question = ChatRequest.builder()
+                .model("deepseek-chat")
+                .messages(Collections.singletonList(new ChatRequest.Message("user", query)))
+                .build();
+        return deepSeekService.generateResponse(question);
     }
 
 }

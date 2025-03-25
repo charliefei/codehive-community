@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <title>Chat</title>
 </head>
+<style>
+    #content {
+        white-space: pre-wrap; /* 保留空白符和换行符 */
+        word-break: break-all; /* 长单词或 URL 自动换行 */
+        padding: 10px;
+        border: 1px solid #ccc;
+        max-width: 600px;
+        overflow-wrap: break-word;
+    }
+</style>
 <body>
 <div>
     <input type="text" id="msgInp"/>
@@ -15,9 +25,15 @@
     const msgInp = document.querySelector("#msgInp");
     const msgBtn = document.querySelector("#msgBtn")
     const content = document.querySelector("#content");
-    msgBtn.addEventListener("click", () => {
+    msgBtn.addEventListener("click", async () => {
+        // let res = await fetch(`http://192.168.6.2:3015/ai/chat?query=${encodeURIComponent(msgInp.value)}`)
+        // let data = await res.text();
+        // console.log('最终响应：', data);
+        // let text = data.replace(/\\n/g, "<br/>")
+        // content.innerHTML += text;
+
         let eventSource = new EventSource(
-            `http://localhost:3015/ai/chat/stream?query=${encodeURIComponent(msgInp.value)}`
+            `http://192.168.6.2:3015/ai/chat/stream?query=${encodeURIComponent(msgInp.value)}`
         );
         eventSource.onopen = () => {
             console.log("onopen 连接成功");
@@ -27,25 +43,33 @@
             eventSource.close();
         };
         eventSource.onmessage = (e) => {
-            content.innerHTML += e.data;
+            console.log("收到消息：", e.data)
+            let text = e.data.replace(/\\n/g, "<br/>")
+            // let text = e.data;
+            content.textContent += text;
         };
-    })
 
-    const controller = new AbortController();
-    const {signal} = controller;
-    fetch(`http://localhost:3015/ai/chat/stream?query=${encodeURIComponent(msgInp.value)}`, {
-        method: "GET",
-        signal
-    }).then(async (response) => {
-        const reader = response.body.getReader();
-        while (true) {
-            const {done, value} = await reader.read();
-            if (done) break;
-            console.log(new TextDecoder().decode(value));
-        }
-    }).catch((error) => {
-        console.error("Fetch error:", error);
-    });
+        // const controller = new AbortController();
+        // const {signal} = controller;
+        // fetch(`http://localhost:3015/ai/chat/stream?query=${encodeURIComponent(msgInp.value)}`, {
+        //     method: "GET",
+        //     signal
+        // }).then(async (response) => {
+        //     const reader = response.body.getReader();
+        //     while (true) {
+        //         const {done, value} = await reader.read();
+        //         if (done) break;
+        //         let text = new TextDecoder().decode(value)
+        //         console.log('@@@', text);
+        //         if (text !== " " && text !== "") {
+        //             text = text.split(":")[1]
+        //         }
+        //         content.innerHTML += text;
+        //     }
+        // }).catch((error) => {
+        //     console.error("Fetch error:", error);
+        // });
+    })
 </script>
 </body>
 </html>

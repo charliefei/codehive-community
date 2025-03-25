@@ -45,11 +45,13 @@ public class ChatResponse implements Serializable {
         public static class Message {
             private String role;
             private String content;
+            private String reasoning_content;
         }
 
         @Data
         public static class Delta {
             private String content;
+            private String reasoning_content;
         }
     }
 
