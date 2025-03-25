@@ -126,13 +126,26 @@ public class ShareMomentController {
     }
 
     @PostMapping("/ai/summary")
-    public Flux<ServerSentEvent<String>> aiSummary(@RequestBody GetAiMomentSummaryReq req) {
+    public String aiSummary(@RequestBody GetAiMomentSummaryReq req) {
         ChatRequest request = ChatRequest.builder()
                 .model("deepseek-chat")
                 .messages(Arrays.asList(
                         new ChatRequest.Message("system", preset_context),
                         new ChatRequest.Message("user", HtmlUtil.cleanHtmlTag(req.getQuery()))
                 ))
+                .build();
+        return deepSeekService.generateResponse(request);
+    }
+
+    @PostMapping("/ai/stream/summary")
+    public Flux<ServerSentEvent<String>> aiStreamSummary(@RequestBody GetAiMomentSummaryReq req) {
+        ChatRequest request = ChatRequest.builder()
+                .model("deepseek-chat")
+                .messages(Arrays.asList(
+                        new ChatRequest.Message("system", preset_context),
+                        new ChatRequest.Message("user", HtmlUtil.cleanHtmlTag(req.getQuery()))
+                ))
+                .stream(true)
                 .build();
         return deepSeekService.generateResponseAsStreamV2(request);
     }
