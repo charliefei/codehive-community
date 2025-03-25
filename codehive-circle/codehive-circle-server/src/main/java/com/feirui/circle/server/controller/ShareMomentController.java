@@ -1,5 +1,6 @@
 package com.feirui.circle.server.controller;
 
+import cn.hutool.http.HtmlUtil;
 import com.alibaba.fastjson.JSON;
 import com.feirui.ai.domain.ChatRequest;
 import com.feirui.ai.service.DeepSeekService;
@@ -16,10 +17,12 @@ import com.feirui.circle.server.service.ShareCircleService;
 import com.feirui.circle.server.service.ShareMomentService;
 import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
@@ -123,15 +126,15 @@ public class ShareMomentController {
     }
 
     @PostMapping("/ai/summary")
-    public String aiSummary(@RequestBody GetAiMomentSummaryReq req) {
+    public Flux<ServerSentEvent<String>> aiSummary(@RequestBody GetAiMomentSummaryReq req) {
         ChatRequest request = ChatRequest.builder()
                 .model("deepseek-chat")
                 .messages(Arrays.asList(
                         new ChatRequest.Message("system", preset_context),
-                        new ChatRequest.Message("user", req.getQuery())
+                        new ChatRequest.Message("user", HtmlUtil.cleanHtmlTag(req.getQuery()))
                 ))
                 .build();
-        return deepSeekService.generateResponse(request);
+        return deepSeekService.generateResponseAsStreamV2(request);
     }
 
 }
