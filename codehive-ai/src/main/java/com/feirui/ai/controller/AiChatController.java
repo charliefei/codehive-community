@@ -3,6 +3,7 @@ package com.feirui.ai.controller;
 import com.feirui.ai.domain.ChatRequest;
 import com.feirui.ai.service.DeepSeekService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +33,17 @@ public class AiChatController {
                 .stream(true)
                 .build();
         return deepSeekService.generateResponseAsStream(question);
+    }
+
+    @GetMapping(value = "/chat/stream/v2", produces = TEXT_EVENT_STREAM_VALUE)
+    public Flux<ServerSentEvent<String>> chatV2(String query) {
+        log.info("query: {}", query);
+        ChatRequest question = ChatRequest.builder()
+                .model("deepseek-chat")
+                .messages(Collections.singletonList(new ChatRequest.Message("user", query)))
+                .stream(true)
+                .build();
+        return deepSeekService.generateResponseAsStreamV2(question);
     }
 
     @GetMapping(value = "/chat")

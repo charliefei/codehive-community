@@ -39,6 +39,7 @@ public class ChatResponse implements Serializable {
 
         private String logprobs;
 
+        // stop, length, content_filter, tool_calls, insufficient_system_resource
         private String finish_reason;
 
         @Data
@@ -50,6 +51,7 @@ public class ChatResponse implements Serializable {
 
         @Data
         public static class Delta {
+            private String role;
             private String content;
             private String reasoning_content;
         }

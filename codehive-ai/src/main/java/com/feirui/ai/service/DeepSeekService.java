@@ -10,10 +10,12 @@ import com.feirui.ai.domain.ChatResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Sinks;
 
 import javax.annotation.Resource;
 import java.util.Optional;
@@ -59,6 +61,63 @@ public class DeepSeekService {
                 .retrieve()
                 .bodyToFlux(String.class)
                 .flatMap(this::extractStreamResponse);
+    }
+
+    public Flux<ServerSentEvent<String>> generateResponseAsStreamV2(ChatRequest request) {
+        Sinks.Many<ServerSentEvent<String>> sink = Sinks.many().multicast().directBestEffort();
+        // 创建WebClient并发起请求
+        WebClient webClient = WebClient.builder()
+                .baseUrl(deepSeekConfig.getApiUrl())
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .defaultHeader("Authorization", "Bearer " + deepSeekConfig.getApiKey())
+                .build();
+        // 发送POST请求并处理响应流
+        webClient.post()
+                .bodyValue(request)
+                .retrieve()
+                .bodyToFlux(String.class)
+                .doOnNext(responseString -> {
+                    try {
+                        log.info("generateResponseAsStreamV2.responseString: {}", responseString);
+                        // 处理每个响应字符串
+                        if ("[DONE]".equals(responseString)) {
+                            // 发送结束事件并关闭流
+                            sink.tryEmitNext(
+                                    ServerSentEvent.<String>builder()
+                                            .event("end") // 自定义结束事件类型
+                                            .data("对话结束")
+                                            .build()
+                            );
+                            sink.tryEmitComplete(); // 完成流
+                        } else {
+                            // 解析并发送数据事件
+                            ChatResponse response = JSONUtil.toBean(responseString, ChatResponse.class);
+                            String content;
+                            if (response.getModel().equals("deepseek-reasoner")) {
+                                content = response.getChoices().get(0).getDelta().getReasoning_content();
+                            } else {
+                                content = response.getChoices().get(0).getDelta().getContent();
+                            }
+                            sink.tryEmitNext(
+                                    ServerSentEvent.<String>builder()
+                                            .event("message") // 数据事件类型
+                                            .data(content)
+                                            .build()
+                            );
+                        }
+                    } catch (Exception e) {
+                        log.error("处理响应失败: {}", responseString, e);
+                        sink.tryEmitError(e);
+                    }
+                })
+                .doOnError(sink::tryEmitError)
+                .doOnTerminate(() -> {
+                    if (sink.currentSubscriberCount() == 0) {
+                        sink.tryEmitComplete();
+                    }
+                })
+                .subscribe();
+        return sink.asFlux();
     }
 
     /**
