@@ -64,7 +64,7 @@ public class DeepSeekService {
     }
 
     public Flux<ServerSentEvent<String>> generateResponseAsStreamV2(ChatRequest request) {
-        Sinks.Many<ServerSentEvent<String>> sink = Sinks.many().multicast().directBestEffort();
+        Sinks.Many<ServerSentEvent<String>> sink = Sinks.many().unicast().onBackpressureBuffer();
         // 创建WebClient并发起请求
         WebClient webClient = WebClient.builder()
                 .baseUrl(deepSeekConfig.getApiUrl())
@@ -98,12 +98,7 @@ public class DeepSeekService {
                             } else {
                                 content = response.getChoices().get(0).getDelta().getContent();
                             }
-                            sink.tryEmitNext(
-                                    ServerSentEvent.<String>builder()
-                                            .event("message") // 数据事件类型
-                                            .data(content)
-                                            .build()
-                            );
+                            sink.tryEmitNext(createMessageEvent(content));
                         }
                     } catch (Exception e) {
                         log.error("处理响应失败: {}", responseString, e);
@@ -153,6 +148,19 @@ public class DeepSeekService {
             }
         }
         return Flux.empty();
+    }
+
+    private ServerSentEvent<String> createMessageEvent(String content) {
+        String encodedData = content
+                .replace("\n", "\\n") // 转义换行符
+                .replace("\r", "")    // 移除回车符
+                .replace(":", "\\:") // 转义冒号
+                .replace(" ", "&nbsp;"); // 转义空格
+
+        return ServerSentEvent.<String>builder()
+                .event("message")
+                .data(encodedData)
+                .build();
     }
 
 }
