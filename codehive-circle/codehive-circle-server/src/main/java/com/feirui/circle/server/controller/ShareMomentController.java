@@ -28,6 +28,8 @@ import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.Objects;
 
+import static org.springframework.http.MediaType.TEXT_EVENT_STREAM_VALUE;
+
 /**
  * 动态信息 前端控制器
  */
@@ -137,7 +139,7 @@ public class ShareMomentController {
         return deepSeekService.generateResponse(request);
     }
 
-    @PostMapping("/ai/stream/summary")
+    @PostMapping(value = "/ai/stream/summary", produces = TEXT_EVENT_STREAM_VALUE)
     public Flux<ServerSentEvent<String>> aiStreamSummary(@RequestBody GetAiMomentSummaryReq req) {
         ChatRequest request = ChatRequest.builder()
                 .model("deepseek-chat")
