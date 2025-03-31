@@ -51,3 +51,6 @@ spring:
   mvc:
     async:
       request-timeout: 600000
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

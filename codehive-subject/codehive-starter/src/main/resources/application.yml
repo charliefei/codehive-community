@@ -52,3 +52,6 @@ es:
     esConfigs:
       - name: ${codehive.es.cluster.esConfigs[0].name}
         nodes: ${codehive.es.cluster.esConfigs[0].nodes}
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
