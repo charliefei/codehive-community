@@ -105,7 +105,10 @@ public class DeepSeekService {
                         sink.tryEmitError(e);
                     }
                 })
-                .doOnError(sink::tryEmitError)
+                .doOnError((e) -> {
+                    log.error("处理响应失败: {}", e.getMessage(), e);
+                    sink.tryEmitError(e);
+                })
                 .doOnTerminate(() -> {
                     if (sink.currentSubscriberCount() == 0) {
                         sink.tryEmitComplete();

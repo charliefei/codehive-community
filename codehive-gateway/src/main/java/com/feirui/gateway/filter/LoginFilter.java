@@ -1,5 +1,6 @@
 package com.feirui.gateway.filter;
 
+import cn.dev33.satoken.reactor.context.SaReactorSyncHolder;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import com.google.gson.Gson;
@@ -22,6 +23,7 @@ public class LoginFilter implements GlobalFilter {
     @Override
     @SneakyThrows
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        SaReactorSyncHolder.setContext(exchange);
         ServerHttpRequest request = exchange.getRequest();
         String url = request.getURI().getPath();
         log.info("LoginFilter.filter.url:{}", url);
