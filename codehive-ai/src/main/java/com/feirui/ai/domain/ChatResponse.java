@@ -67,6 +67,8 @@ public class ChatResponse implements Serializable {
 
         private Prompt_tokens_details prompt_tokens_details;
 
+        private Completion_tokens_details completion_tokens_details;
+
         private Integer prompt_cache_hit_tokens;
 
         private Integer prompt_cache_miss_tokens;
@@ -75,5 +77,11 @@ public class ChatResponse implements Serializable {
         public static class Prompt_tokens_details {
             private Integer cached_tokens;
         }
+
+        @Data
+        public static class Completion_tokens_details {
+            private Integer reasoning_tokens;
+        }
+
     }
 }

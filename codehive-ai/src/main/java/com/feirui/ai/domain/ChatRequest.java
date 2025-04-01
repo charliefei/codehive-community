@@ -15,9 +15,12 @@ public class ChatRequest {
 
     private String model;
     private List<Message> messages;
+    private ResponseFormat response_format;
+    private Object stop;
     private Double temperature;
     private Integer max_tokens;
-    private boolean stream;
+    private Boolean stream;
+    private StreamOptions stream_options;
 
     @Data
     @NoArgsConstructor
@@ -25,6 +28,23 @@ public class ChatRequest {
     public static class Message {
         private String role;
         private String content;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ResponseFormat {
+        /**
+         * text | json_object
+         */
+        private String type;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class StreamOptions {
+        private Boolean include_usage;
     }
 
 }
