@@ -28,6 +28,7 @@ import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.Objects;
 
+import static com.feirui.ai.config.PresetPrompts.CIRCLE_ARTICLE_SUMMARY_PROMPT;
 import static org.springframework.http.MediaType.TEXT_EVENT_STREAM_VALUE;
 
 /**
@@ -37,8 +38,6 @@ import static org.springframework.http.MediaType.TEXT_EVENT_STREAM_VALUE;
 @RestController
 @RequestMapping("/circle/share/moment")
 public class ShareMomentController {
-
-    private static final String preset_context = "接下来我给你输入一篇文章，我帮我总结这篇文章，并提炼要点";
 
     @Resource
     private ShareMomentService shareMomentService;
@@ -132,7 +131,7 @@ public class ShareMomentController {
         ChatRequest request = ChatRequest.builder()
                 .model("deepseek-chat")
                 .messages(Arrays.asList(
-                        new ChatRequest.Message("system", preset_context),
+                        new ChatRequest.Message("system", CIRCLE_ARTICLE_SUMMARY_PROMPT),
                         new ChatRequest.Message("user", HtmlUtil.cleanHtmlTag(req.getQuery()))
                 ))
                 .build();
@@ -144,7 +143,7 @@ public class ShareMomentController {
         ChatRequest request = ChatRequest.builder()
                 .model("deepseek-chat")
                 .messages(Arrays.asList(
-                        new ChatRequest.Message("system", preset_context),
+                        new ChatRequest.Message("system", CIRCLE_ARTICLE_SUMMARY_PROMPT),
                         new ChatRequest.Message("user", HtmlUtil.cleanHtmlTag(req.getQuery()))
                 ))
                 .stream(true)
