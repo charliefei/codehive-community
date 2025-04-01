@@ -35,6 +35,7 @@ public class ApplicationTest {
                         new ChatRequest.Message("system", preset_context1),
                         new ChatRequest.Message("user", user_query1)
                 ))
+                .response_format(new ChatRequest.ResponseFormat("json_object"))
                 .build();
 
         String json = deepSeekService.generateResponse(request);
@@ -59,6 +60,7 @@ public class ApplicationTest {
                         new ChatRequest.Message("system", preset_context2),
                         new ChatRequest.Message("user", user_query2)
                 ))
+                .response_format(new ChatRequest.ResponseFormat("json_object"))
                 .build();
 
         String json = deepSeekService.generateResponse(request);

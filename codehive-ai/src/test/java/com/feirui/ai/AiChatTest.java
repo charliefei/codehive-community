@@ -1,9 +1,12 @@
 package com.feirui.ai;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HtmlUtil;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.http.Method;
+import cn.hutool.json.JSONException;
+import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.feirui.ai.domain.ChatRequest;
 import com.feirui.ai.domain.ChatResponse;
@@ -64,7 +67,7 @@ public class AiChatTest {
     public void testAIChatStream() throws IOException {
         String query = "帮我用java解决力扣上的接雨水问题";
         ChatRequest request = ChatRequest.builder()
-                .model("deepseek-chat")
+                .model("deepseek-reasoner")
                 .messages(Collections.singletonList(new ChatRequest.Message("user", query)))
                 .stream(true)
                 .build();
@@ -90,7 +93,26 @@ public class AiChatTest {
                     }
                     return Flux.empty();
                 });
-        authorization.subscribe(res -> log.info("最终响应：{}", res));
+        authorization.subscribe(res -> {
+            try {
+                ChatResponse response = JSONUtil.toBean(res, ChatResponse.class);
+                String content = response.getChoices().get(0).getDelta().getContent();
+                String reasoningContent = response.getChoices().get(0).getDelta().getReasoning_content();
+                if (StrUtil.isBlank(reasoningContent)) {
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.set("content", content);
+                    jsonObject.set("thinking", false);
+                    System.out.println(jsonObject);
+                } else {
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.set("content", reasoningContent);
+                    jsonObject.set("thinking", true);
+                    System.out.println(jsonObject);
+                }
+            } catch (JSONException e) {
+                log.error("解析失败: {}", res);
+            }
+        });
 
         System.in.read();
     }
