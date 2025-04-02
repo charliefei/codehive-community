@@ -6,6 +6,7 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.feirui.ai.domain.ChatRequest;
 import com.feirui.ai.service.DeepSeekService;
+import com.feirui.interview.api.vo.InterviewQuestionVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
@@ -17,6 +18,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import static com.feirui.ai.config.PresetPrompts.*;
@@ -69,7 +71,9 @@ public class ApplicationTest {
         // System.out.println("deepseek labelName = " + json_obj.get("labelName"));
         // System.out.println("deepseek subjectAnswer = " + json_obj.get("subjectAnswer"));
         JSONArray json_arr = JSONUtil.parseArray(json);
+        List<InterviewQuestionVO.Interview> list = json_arr.toList(InterviewQuestionVO.Interview.class);
         System.out.println("deepseek result = \n" + json_arr.toStringPretty());
+        System.out.println("java result = \n" + list);
         System.out.printf("耗时 %d 秒", (System.currentTimeMillis() - start) / 1000);
     }
 

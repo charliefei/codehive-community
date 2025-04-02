@@ -1,5 +1,6 @@
 package com.feirui.interview.server.service.impl;
 
+import com.feirui.interview.api.enums.EngineEnum;
 import com.feirui.interview.api.req.InterviewReq;
 import com.feirui.interview.api.req.InterviewSubmitReq;
 import com.feirui.interview.api.req.StartReq;
@@ -44,6 +45,18 @@ public class InterviewServiceImpl implements InterviewService, ApplicationContex
         List<String> keyWords = buildKeyWords(req.getUrl());
         InterviewEngine engine = engineMap.get(req.getEngine());
         Preconditions.checkArgument(!Objects.isNull(engine), "引擎不能为空！");
+        return engine.analyse(keyWords);
+    }
+
+    @Override
+    public InterviewVO analyseV2(InterviewReq req) {
+        if (!req.getEngine().equals(EngineEnum.DEEPSEEK.name())) {
+            throw new IllegalArgumentException("必须要是DEEPSEEK");
+        }
+        String pdfText = PDFUtil.getPdfText(req.getUrl());
+        List<String> keyWords = buildKeyWords(req.getUrl());
+        keyWords.add(0, pdfText);
+        InterviewEngine engine = engineMap.get(req.getEngine());
         return engine.analyse(keyWords);
     }
 

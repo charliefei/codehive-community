@@ -10,6 +10,7 @@ import com.feirui.interview.api.vo.InterviewVO;
 public interface InterviewService {
 
     InterviewVO analyse(InterviewReq req);
+    InterviewVO analyseV2(InterviewReq req);
 
     InterviewQuestionVO start(StartReq req);
 

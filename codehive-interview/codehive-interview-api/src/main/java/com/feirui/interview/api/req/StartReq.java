@@ -16,6 +16,8 @@ public class StartReq implements Serializable {
 
     private List<Key> questionList;
 
+    private String pdfText;
+
     @Data
     public static class Key {
         private String keyWord;

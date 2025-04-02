@@ -46,7 +46,7 @@ public class InterviewController {
             Preconditions.checkArgument(!Objects.isNull(req), "参数不能为空！");
             Preconditions.checkArgument(!Objects.isNull(req.getEngine()), "引擎不能为空！");
             Preconditions.checkArgument(!Objects.isNull(req.getUrl()), "简历不能为空！");
-            return Result.ok(interviewService.analyse(req));
+            return Result.ok(interviewService.analyseV2(req));
         } catch (IllegalArgumentException e) {
             log.error("参数异常！错误原因{}", e.getMessage(), e);
             return Result.fail(e.getMessage());

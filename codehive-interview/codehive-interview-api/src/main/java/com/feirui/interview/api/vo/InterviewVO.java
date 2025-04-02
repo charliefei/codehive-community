@@ -13,6 +13,8 @@ public class InterviewVO implements Serializable {
 
     private List<Interview> questionList;
 
+    private String pdfText;
+
     @Data
     public static class Interview {
         private String keyWord;
