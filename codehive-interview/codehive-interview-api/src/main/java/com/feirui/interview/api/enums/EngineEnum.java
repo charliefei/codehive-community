@@ -10,5 +10,6 @@ public enum EngineEnum {
 
     JI_CHI,
     ALI_BL,
+    DEEPSEEK
 
 }
