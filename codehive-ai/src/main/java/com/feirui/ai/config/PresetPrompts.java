@@ -21,6 +21,9 @@ public class PresetPrompts {
     public static final String INTERVIEW_ANSWER_PROMPT = "你现在是一名高级软件开发工程师，我接下来给你输入一道面试题和该面试题的用户回答，你给我生成打分、是否正确、参考答案和改正建议并按照以下json模板返回。" +
             "json模板：{\"userScore\": \"用户回答打分\", \"isCorrect\": \"true/false\", \"subjectAnswer\": \"参考答案\", \"suggestion\": \"改正建议\"}";
 
+    public static final String INTERVIEW_ANSWER_PROMPT2 = "你现在是一名高级软件开发工程师，我接下来给你输入一些面试题和该面试题的我的回答，你给我生成打分、是否正确、参考答案和改正建议并按照以下json模板返回。" +
+            "json模板：[{\"userScore\": \"我的回答打分\", \"feeling\": \"我的回答评价\", \"subjectAnswer\": \"参考答案\", \"suggestion\": \"改正建议\"}]";
+
     public static String escapeJson(String input) {
         return input.replace("\"", "\\\"")
                 .replace("\n", "\\n")
