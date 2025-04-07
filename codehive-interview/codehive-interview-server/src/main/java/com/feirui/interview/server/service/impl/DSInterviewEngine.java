@@ -21,8 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.feirui.ai.config.PresetPrompts.INTERVIEW_ANSWER_PROMPT;
-import static com.feirui.ai.config.PresetPrompts.INTERVIEW_QUESTION_PROMPT;
+import static com.feirui.ai.config.PresetPrompts.*;
 
 @Service
 @Slf4j
@@ -85,19 +84,26 @@ public class DSInterviewEngine implements InterviewEngine {
     public InterviewResultVO submit(InterviewSubmitReq req) {
         long start = System.currentTimeMillis();
         List<InterviewSubmitReq.Submit> submits = req.getQuestionList();
-        List<String> query = submits.stream().map(submit -> "面试题：" + submit.getSubjectName() + "。用户回答：" + submit.getUserAnswer()).collect(Collectors.toList());
+        String query = submits.stream().map(submit -> "面试题：" + submit.getSubjectName() + "，用户回答：" + submit.getUserAnswer()).collect(Collectors.joining("；"));
         ChatRequest request = ChatRequest.builder()
                 .model("deepseek-chat")
                 .messages(Arrays.asList(
-                        new ChatRequest.Message("system", INTERVIEW_ANSWER_PROMPT),
-                        new ChatRequest.Message("user", JSONUtil.toJsonStr(query))
+                        new ChatRequest.Message("system", INTERVIEW_ANSWER_PROMPT2),
+                        new ChatRequest.Message("user", query)
                 ))
                 .build();
         String json = deepSeekService.generateResponse(request);
         if (json.contains("```json")) {
             json = json.substring(json.lastIndexOf("```json") + 7, json.lastIndexOf("```"));
         }
-        InterviewResultVO vo = JSONUtil.toBean(json, InterviewResultVO.class);
+        List<InterviewResultVO.InterviewResult> list = JSONUtil.parseArray(json).toList(InterviewResultVO.InterviewResult.class);
+        InterviewResultVO vo = new InterviewResultVO();
+        String tips = list.stream().map(InterviewResultVO.InterviewResult::getSuggestion).collect(Collectors.joining(";"));
+        vo.setTips(tips);
+        double total = list.stream().mapToInt(InterviewResultVO.InterviewResult::getUserScore).sum();
+        vo.setAvgScore(total / submits.size());
+        vo.setAvgTips("");
+        vo.setResp(list);
         log.info("cost: {}s data:\n{}", (System.currentTimeMillis() - start) / 1000, json);
         return vo;
     }

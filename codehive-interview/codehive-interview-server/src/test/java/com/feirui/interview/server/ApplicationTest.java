@@ -142,7 +142,7 @@ public class ApplicationTest {
                         new ChatRequest.Message("system", INTERVIEW_ANSWER_PROMPT2),
                         new ChatRequest.Message("user", user_query3)
                 ))
-                .response_format(new ChatRequest.ResponseFormat("json_object"))
+                // .response_format(new ChatRequest.ResponseFormat("json_object"))
                 .build();
 
         // 创建异步任务
@@ -152,7 +152,7 @@ public class ApplicationTest {
                     if (json.contains("```json")) {
                         json = json.substring(json.lastIndexOf("```json") + 7, json.lastIndexOf("```"));
                     }
-                    return JSONUtil.parseObj(json);
+                    return JSONUtil.parseArray(json);
                 })
                 .thenAccept(json_obj -> {
                     System.out.println(json_obj.toStringPretty());
