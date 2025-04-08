@@ -14,6 +14,7 @@ import reactor.core.publisher.Flux;
 import javax.annotation.Resource;
 import java.util.*;
 
+import static com.feirui.ai.config.PresetPrompts.INTERVIEW_EXPERT_PROMPT;
 import static org.springframework.http.MediaType.TEXT_EVENT_STREAM_VALUE;
 
 @RestController
@@ -84,6 +85,23 @@ public class AiChatController {
         }
 
         messages.add(userMessage);
+        ChatRequest question = ChatRequest.builder()
+                .model("deepseek-chat")
+                .messages(messages)
+                .stream(true)
+                .build();
+        return deepSeekService.generateResponseAsStreamV2(question);
+    }
+
+    @PostMapping(value = "/chat/stream/agent", produces = TEXT_EVENT_STREAM_VALUE)
+    public Flux<ServerSentEvent<String>> chatAgent(@RequestBody ChatMsgReq req) {
+        log.info("req: {}", JSONUtil.toJsonStr(req));
+
+        List<ChatRequest.Message> messages = new ArrayList<>();
+        messages.add(new ChatRequest.Message("system", INTERVIEW_EXPERT_PROMPT));
+        messages.addAll(JSONUtil.toList(req.getHistory(), ChatRequest.Message.class));
+        messages.add(new ChatRequest.Message("user", req.getQuery()));
+
         ChatRequest question = ChatRequest.builder()
                 .model("deepseek-chat")
                 .messages(messages)

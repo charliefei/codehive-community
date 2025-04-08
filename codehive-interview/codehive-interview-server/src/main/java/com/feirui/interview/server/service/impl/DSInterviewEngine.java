@@ -42,7 +42,7 @@ public class DSInterviewEngine implements InterviewEngine {
         if (StringUtils.isBlank(pdfText) || CollectionUtil.isEmpty(keyWords)) {
             return interviewVO;
         }
-        List<InterviewVO.Interview> questionList = keyWords.stream().map(item -> {
+        List<InterviewVO.Interview> questionList = keyWords.stream().distinct().map(item -> {
             InterviewVO.Interview interview = new InterviewVO.Interview();
             interview.setKeyWord(item);
             interview.setCategoryId(-1L);
