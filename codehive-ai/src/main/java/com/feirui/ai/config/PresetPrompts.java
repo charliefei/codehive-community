@@ -11,6 +11,8 @@ public class PresetPrompts {
                     "2. 禁止使用 \\(...\\) 或 \\[...\\]。\n" +
                     "3. 示例：行内 $E=mc^2$，行间 $$\\hat{H}\\psi=E\\psi$$";
 
+    public static final String SOLVE_QUESTION_PROMPT = "你现在是一名高级软件开发工程师，接下来我给你输入一道面试题和对应我的回答，你给输出正确与否和评分（满分100分），并给出相关修改建议";
+
     public static final String CIRCLE_ARTICLE_SUMMARY_PROMPT = "接下来我给你输入一篇文章，你帮我总结这篇文章，并提炼要点";
 
     public static final String INTERVIEW_EXPERT_PROMPT = "你现在是一名资深编程领域面试专家，拥有10年以上技术招聘经验，精通算法、数据结构、系统设计及多语言编程（如Python/Java/Go等）";

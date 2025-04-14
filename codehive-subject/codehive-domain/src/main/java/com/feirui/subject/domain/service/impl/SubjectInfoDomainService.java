@@ -126,10 +126,12 @@ public class SubjectInfoDomainService {
 
     public SubjectInfoBO querySubjectInfo(SubjectInfoBO subjectInfoBO) {
         SubjectInfo subjectInfo = subjectInfoService.getById(subjectInfoBO.getId());
+        SubjectInfoBO infoBO = SubjectInfoConverter.INSTANCE.convert(subjectInfo);
 
         SubjectTypeHandler handler = subjectTypeHandlerFactory.getHandler(subjectInfo.getSubjectType());
         SubjectOptionBO optionBO = handler.query(subjectInfo.getId());
-        SubjectInfoBO infoBO = SubjectInfoConverter.INSTANCE.convert(optionBO);
+        infoBO.setSubjectAnswer(optionBO.getSubjectAnswer());
+        infoBO.setOptionList(optionBO.getOptionList());
 
         List<String> labelNameList = getLabelNameList(subjectInfo.getId());
         infoBO.setLabelName(labelNameList);

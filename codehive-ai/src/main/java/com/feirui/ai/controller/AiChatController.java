@@ -15,6 +15,7 @@ import javax.annotation.Resource;
 import java.util.*;
 
 import static com.feirui.ai.config.PresetPrompts.INTERVIEW_EXPERT_PROMPT;
+import static com.feirui.ai.config.PresetPrompts.SOLVE_QUESTION_PROMPT;
 import static org.springframework.http.MediaType.TEXT_EVENT_STREAM_VALUE;
 
 @RestController
@@ -105,6 +106,19 @@ public class AiChatController {
         ChatRequest question = ChatRequest.builder()
                 .model("deepseek-chat")
                 .messages(messages)
+                .stream(true)
+                .build();
+        return deepSeekService.generateResponseAsStreamV2(question);
+    }
+
+    @PostMapping(value = "/chat/stream/question", produces = TEXT_EVENT_STREAM_VALUE)
+    public Flux<ServerSentEvent<String>> chatQuestionAgent(@RequestBody Map<String, Object> map) {
+        log.info("map: {}", JSONUtil.toJsonStr(map));
+        ChatRequest.Message system = new ChatRequest.Message("system", SOLVE_QUESTION_PROMPT);
+        ChatRequest.Message user = new ChatRequest.Message("user", String.valueOf(map.get("query")));
+        ChatRequest question = ChatRequest.builder()
+                .model("deepseek-chat")
+                .messages(Arrays.asList(system, user))
                 .stream(true)
                 .build();
         return deepSeekService.generateResponseAsStreamV2(question);
