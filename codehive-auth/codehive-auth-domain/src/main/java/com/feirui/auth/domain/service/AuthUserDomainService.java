@@ -83,7 +83,10 @@ public class AuthUserDomainService {
                 .stream()
                 .map(AuthRolePermission::getPermissionId)
                 .collect(Collectors.toList());
-        List<AuthPermission> authPermissions = authPermissionService.queryByIds(permissionIds);
+        List<AuthPermission> authPermissions = new LinkedList<>();
+        if (!CollectionUtils.isEmpty(permissionIds)) {
+            authPermissions = authPermissionService.queryByIds(permissionIds);
+        }
         String permissionCacheKey = redisUtil.buildKey(authPermissionPrefix, authUser.getUserName());
         redisUtil.set(permissionCacheKey, new Gson().toJson(authPermissions));
         return success;
